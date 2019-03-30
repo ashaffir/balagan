@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import Modal from './modal.js';
+import CurrentValue from './apiData.js';
 
 class App extends Component {
 
   state = {
     showForm: false,
     show: false,
-    highLow: null
+    highLow: null,
+    currentValue: null
   }
 
   toggleForm() {
@@ -24,12 +26,15 @@ class App extends Component {
     e.preventDefault()
     console.log(`Betting on a low result`)
   }
-
-  getCurrentValue =  (e) => {
-    // e.target.value = 5000;
-    console.log('checking value')
-  }
  
+  getCurrentValue = () => {
+    // this.setState({
+    //   currentValue: API()
+    // })
+    console.log(`current  value is ${CurrentValue}`);
+  }
+
+
   showModal = () => {
     this.setState({
       ...this.state,
@@ -48,7 +53,6 @@ class App extends Component {
       highLow: direction
     })
   }
-
 
   render() {
     
@@ -77,7 +81,7 @@ class App extends Component {
                             <td className="current_value"><h2>Current Value</h2></td>
                           </tr>
                           <tr>
-                            <td id="current_value"><h3>VALUE</h3></td>
+                            <td id="current_value"><h3><CurrentValue /></h3></td>
                           </tr>  
                       </tbody>
                     </table>
