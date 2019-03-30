@@ -1,25 +1,104 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import Modal from './modal.js';
 
 class App extends Component {
+
+  state = {
+    showForm: false,
+    show: false,
+    highLow: null
+  }
+
+  toggleForm() {
+    this.setState({
+      showForm: !this.state.showForm
+    });
+  }
+
+  handleBetHigh = (e) => {
+    e.preventDefault()
+    console.log(`Betting on a high result`)
+  }
+
+  handleBetLow = (e) => {
+    e.preventDefault()
+    console.log(`Betting on a low result`)
+  }
+
+  getCurrentValue =  (e) => {
+    // e.target.value = 5000;
+    console.log('checking value')
+  }
+ 
+  showModal = () => {
+    this.setState({
+      ...this.state,
+     show: !this.state.show
+    })    
+  }
+
+  closeModal = () => {
+    this.setState({
+      show: false
+    })
+  }
+
+  setDirection = (direction) => {
+    this.setState({
+      highLow: direction
+    })
+  }
+
+
   render() {
+    
     return (
       <div className="App">
         <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
+          <h1>Swing@Bit</h1>
+          
         </header>
+        <canvas id="canvas"></canvas>
+        <section>
+        <table align='center'>
+          <tbody >
+            <tr className='row'>
+              <td>
+                <div>
+                  <button className="push_button blue" onClick={
+                    (e) => {this.showModal();this.setDirection('High')}}>Will be Higher</button>
+                </div>
+              </td>
+              <td>
+                <div>
+                    <table>
+                      <tbody>
+                          <tr>
+                            <td className="current_value"><h2>Current Value</h2></td>
+                          </tr>
+                          <tr>
+                            <td id="current_value"><h3>VALUE</h3></td>
+                          </tr>  
+                      </tbody>
+                    </table>
+                </div>
+              </td>
+              <td>
+                <div>
+                  <button type="button" className="push_button red" onClick={
+                    (e) => {this.showModal();this.setDirection('Low')}}>Will be Lower</button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        </section>
+        <Modal 
+            onClose={this.showModal}
+            show={this.state.show}
+            highLow={this.state.highLow}>
+          </Modal>
+
       </div>
     );
   }
