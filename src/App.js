@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Modal from './modal.js';
 import CurrentValue from './apiData.js';
+import Chart from './chart.js';
 
 class App extends Component {
 
@@ -62,7 +63,7 @@ class App extends Component {
           <h1>Swing@Bit</h1>
           
         </header>
-        <canvas id="canvas"></canvas>
+        <Chart />
         <section>
         <table align='center'>
           <tbody >

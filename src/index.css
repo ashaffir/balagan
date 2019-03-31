@@ -35,10 +35,10 @@ section{
   background: #AD4257;
 }
 
-canvas {
+/* canvas {
   background: lightgray;
   width: 70%;
-}
+} */
 
 .push_button {
   position: relative;
