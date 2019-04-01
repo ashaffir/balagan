@@ -19,6 +19,6 @@ const Header = props => {
   );
 };
 Header.defaultProps = {
-  branding: "Real-Time Cryptocurrency Dashboard"
+  branding: "Do you know if it will go up or down?"
 };
 export default Header;

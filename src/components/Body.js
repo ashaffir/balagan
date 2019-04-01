@@ -1,12 +1,13 @@
 import React from 'react';
 import PriceCard from './PriceCard';
-import Modal from './modal.js';
+import Form from './Form.js';
 //import axios from 'axios';
 import FusionCharts from 'fusioncharts';
 import Charts from 'fusioncharts/fusioncharts.charts';
 import Widgets from 'fusioncharts/fusioncharts.widgets';
 import ReactFC from 'react-fusioncharts';
 import FusionTheme from 'fusioncharts/themes/fusioncharts.theme.fusion';
+import './Body.css'
 
 ReactFC.fcRoot(FusionCharts, Charts, Widgets, FusionTheme);
 
@@ -23,7 +24,7 @@ class Body extends React.Component{
             initValue: 0,
             dataSource : {
                 "chart": {
-                    "caption": "Bitcoin Ticker",
+                    "caption": "Bitcoin Current Value",
                     "subCaption": "",
                     "xAxisName": "Local Time",
                     "yAxisName": "USD",
@@ -70,6 +71,10 @@ class Body extends React.Component{
             .then(d => {
                 let x_axis = this.clientDateTime();
                 let y_axis = d.ticker.price;
+                console.log(`current fucking value = ${d.ticker.price}`);
+                this.setState({
+                  btcusd: d.ticker.price
+                });
                 this.chartRef.feedData("&label=" + x_axis + "&value=" + y_axis);
             });
         }, 2000);
@@ -125,14 +130,14 @@ class Body extends React.Component{
       
     }
 
-    // Modal (form) functions)
-    showModal = () => {
+    // Form functions)
+    showForm = () => {
       this.setState({
         ...this.state,
        show: !this.state.show
       }) 
     } 
-    closeModal = () => {
+    closeForm = () => {
       this.setState({
         show: false
       })
@@ -160,24 +165,25 @@ class Body extends React.Component{
                     </div>
                   </div>
             </div>
-            <div className="col-12 mb-3">
+            <div className="row col-12 mb-5 buttons-area">
                  <div className="card-deck custom-card-deck">
                     
                     {/* <PriceCard header="Litecoin(LTC)"   src={'/litecoin.png'} alt="fireSpot" label="(Price in USD)"  value={this.state.ltcusd}/>
                     <PriceCard header="Ethereum(ETH)" src={'/ethereum.png'} alt="fireSpot" label="(Price in USD)"    value={this.state.ethusd}/> */}
-                    <section>
-                      <table align='center'>
-                        <tbody align='center'>
-                          <tr className='row'>
+                    
+                    <section className="buttons-section">
+                      <table >
+                        <tbody >
+                          <tr className="buttons-row">
                             <td>
                               <div>
                                 <button className="push_button blue" onClick={
-                                  (e) => {this.showModal();this.setDirection('High')}}>Will be Higher</button>
+                                  (e) => {this.showForm();this.setDirection('Up')}}>Will be Higher</button>
                               </div>
                             </td>
                             <td>
                             <PriceCard 
-                              header="Bitcoin(BTC)" 
+                              header="Bitcoin" 
                               src={'/bitcoin.png'} 
                               alt="fireSpot" 
                               label="(Price in USD)"   
@@ -187,7 +193,7 @@ class Body extends React.Component{
                             <td>
                               <div>
                                 <button type="button" className="push_button red" onClick={
-                                  (e) => {this.showModal();this.setDirection('Low')}}>Will be Lower</button>
+                                  (e) => {this.showForm();this.setDirection('Down')}}>Will be Lower</button>
                               </div>
                             </td>
                           </tr>
@@ -196,11 +202,11 @@ class Body extends React.Component{
                     </section>
                  </div>          
             </div>
-            <Modal 
-            onClose={this.showModal}
+            <Form 
+            onClose={this.showForm}
             show={this.state.show}
             highLow={this.state.highLow}>
-          </Modal>
+          </Form>
 		</div>
         )
     }
