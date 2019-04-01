@@ -1,7 +1,12 @@
 import React, { Component } from 'react';
-import Modal from './modal.js';
+// import Modal from './modal.js';
 import CurrentValue from './apiData.js';
 import Chart from './chart.js';
+
+import Header from "./components/Header";
+import Body from "./components/Body";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "../src/style.css";
 
 class App extends Component {
 
@@ -63,8 +68,19 @@ class App extends Component {
           <h1>Swing@Bit</h1>
           
         </header>
-        <Chart />
-        <section>
+        {/* Start Chart Section */}
+        {/* <Chart /> */}
+        {/* <style type="text/css">
+          g[class^='raphael-group-'][class$='-creditgroup'] {
+              display:none !important;
+          }
+        </style> */}
+        <Header branding="Real-Time Cryptocurrency Dashboard" />
+        <div className="container">
+          <Body />
+        </div>
+        {/* Send Chart SEction */}
+        {/* <section>
         <table align='center'>
           <tbody >
             <tr className='row'>
@@ -97,12 +113,12 @@ class App extends Component {
             </tr>
           </tbody>
         </table>
-        </section>
-        <Modal 
+        </section> */}
+        {/* <Modal 
             onClose={this.showModal}
             show={this.state.show}
             highLow={this.state.highLow}>
-          </Modal>
+          </Modal> */}
 
       </div>
     );

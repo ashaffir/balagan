@@ -1,5 +1,5 @@
 // Instructions are at: https://canvasjs.com/docs/charts/integration/react/
-import CurrentValue from './apiData.js'
+
 import React, { Component } from 'react';
 import CanvasJSReact from './assets/canvasjs.react';
 const CanvasJSChart = CanvasJSReact.CanvasJSChart;
@@ -12,11 +12,13 @@ let time = today.getHours() + " " + today.getMinutes();
 let dps = [{x: new Date().getSeconds(), y:4000}];
 console.log(`dps.length = ${dps.length}`);
 console.log(`dps X = ${dps[0].x}  Y = ${dps[0].y}`);
-let xVal = new Date(today);
-console.log(xVal)
-let yVal = dps[0].y;
+let xVal = dps.length + 1;
+let yVal = 4000;
+
+console.log(new Date("2017-01-01"));
 
 const updateInterval = 1000;
+
 
 export default class Chart extends Component {
 	constructor() {
@@ -26,11 +28,9 @@ export default class Chart extends Component {
 	componentDidMount() {
 		setInterval(this.updateChart, updateInterval);
 	}
-	
 	updateChart() {
 		// yVal = yVal +  Math.round(5 + Math.random() *(-5-5));
-		yVal = CurrentValue.state.value;
-		console.log(`yVal = ${yVal}`)
+		yVal = yVal + 100;
 		dps.push({x: new Date().getSeconds(), y: yVal});
 		xVal = time;
 		if (dps.length >  10 ) {
