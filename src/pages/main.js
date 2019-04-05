@@ -5,6 +5,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "../../src/style.css";
 import '../index.css'
 import logo from '../img/sab-logo7.png'
+import Gamers from '../components/Gamers';
 
 
 export default class Main extends Component {
@@ -20,7 +21,7 @@ export default class Main extends Component {
     
     return (
         <div className="App">
-          <header className="App-header" align='center'>
+          <header className="App-header logo-section" align='center'>
             <img src={logo} alt="Swing@bit logo" />
             
           </header>
@@ -34,6 +35,7 @@ export default class Main extends Component {
           {/* <Header className="App-header" branding="Do you know if it will go up or down?" align='center'/> */}
           <div className="container">
             <Body />
+            <Gamers />
           </div>
         </div>
     );

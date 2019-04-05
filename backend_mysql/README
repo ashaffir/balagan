@@ -1,0 +1,12 @@
+
+Setting up:
+-----------
+
+npm init
+
+yarn add mysql express cors
+
+To run:
+
+npx nodemon
+

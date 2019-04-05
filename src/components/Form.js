@@ -7,6 +7,8 @@ import React from 'react';
 import Button from 'react-bootstrap/Button';
 import PropTypes from 'prop-types';
 import QRCode from 'qrcode.react'; //https://www.npmjs.com/package/qrcode.react
+import axios from "axios";
+import './Form.css'
 
 const backdropStyle = {
     position: 'fixed',
@@ -53,19 +55,22 @@ const upperClose = {
     cursor: 'pointer'
 }
 
-const qrSection = {
-    maxWidth: 100,
-    minHeight: 100,
-    padding: 5,
-    textAlign: 'center'
-}
 
 export default class Form extends React.Component {
     state = {
         user_wallet: null,      
         bet: 0,
         highLow: null,
-        our_wallet: '0x69069F7589B35d5a436eCf4718EEE3402B2e3dab'
+        our_wallet: '0x69069F7589B35d5a436eCf4718EEE3402B2e3dab',
+
+        data: [],
+        id: 0,
+        message: null,
+        intervalIsSet: false,
+        idToDelete: null,
+        idToUpdate: null,
+        objectToUpdate: null
+    
     };
 
     onClose = (e) => {
@@ -79,13 +84,6 @@ export default class Form extends React.Component {
         document.addEventListener('keyup', (e) => {
             if (e.keyCode === 27 && this.props.show) this.onClose();
         })
-    }
-    componentDidMount(){
-        document.addEventListener("keyup", this.onEsc)
-    }
-
-    componentWillUnmount () {
-        document.removeEventListener("keyup", this.onEsc)
     }
 
     handleBet = (e) => {
@@ -142,6 +140,45 @@ export default class Form extends React.Component {
         }
     }
 
+    componentDidMount() {
+        //Escape key to exit form
+        document.addEventListener("keyup", this.onEsc)
+
+        // DB reads
+        this.getDataFromDb();
+            if (!this.state.intervalIsSet) {
+                let interval = setInterval(this.getDataFromDb, 1000);
+                this.setState({ intervalIsSet: interval });
+            }
+    }
+
+    componentWillUnmount() {
+    document.removeEventListener("keyup", this.onEsc)
+        if (this.state.intervalIsSet) {
+            clearInterval(this.state.intervalIsSet);
+            this.setState({ intervalIsSet: null });
+        }
+    }
+    
+    getDataFromDb = () => {
+        fetch("http://localhost:3001/api/getData")
+          .then(data => data.json())
+          .then(res => this.setState({ data: res.data }));
+      }; 
+    
+    putDataToDB = message => {
+    let currentIds = this.state.data.map(data => data.id);
+    let idToBeAdded = 0;
+    while (currentIds.includes(idToBeAdded)) {
+        ++idToBeAdded;
+    }
+
+    axios.post("http://localhost:3001/api/putData", {
+        id: idToBeAdded,
+        message: message
+    });
+    };
+
     render() {
         if (!this.props.show){
             return null
@@ -183,10 +220,10 @@ export default class Form extends React.Component {
                     </div>
 
                     <div>
-                        <h2>Our Wallet</h2>
+                        <h3>Our Wallet</h3>
                         <p>0x69069F7589B35d5a436eCf4718EEE3402B2e3dab</p>
                     </div>
-                    <div label="QR code section" style={qrSection} align='center'>
+                    <div label="QR code section" className="qrSection">
                         <QRCode value={this.state.our_wallet} />
                     </div>
                     
