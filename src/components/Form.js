@@ -4,11 +4,10 @@ https://www.youtube.com/watch?v=gTqXHZaRjoU
  */
 
 import React from 'react';
-import Button from 'react-bootstrap/Button';
 import PropTypes from 'prop-types';
-import QRCode from 'qrcode.react'; //https://www.npmjs.com/package/qrcode.react
-import axios from "axios";
-import './Form.css'
+import QRCode from 'qrcode.react'; //https://www.npmjs.com/package/qrcode.react;
+import './Form.css';
+import Cookies from 'universal-cookie';
 
 const backdropStyle = {
     position: 'fixed',
@@ -58,19 +57,11 @@ const upperClose = {
 
 export default class Form extends React.Component {
     state = {
-        user_wallet: null,      
-        bet: 0,
         highLow: null,
-        our_wallet: '0x69069F7589B35d5a436eCf4718EEE3402B2e3dab',
-
-        data: [],
-        id: 0,
-        message: null,
-        intervalIsSet: false,
-        idToDelete: null,
-        idToUpdate: null,
-        objectToUpdate: null
-    
+        current_cycle: 0,
+        cycle_value: 'CYCLE_VALUE',
+        user_local_wallet: 'USER_LOCAL_WALLET',
+        bet: 0
     };
 
     onClose = (e) => {
@@ -86,15 +77,30 @@ export default class Form extends React.Component {
         })
     }
 
-    handleBet = (e) => {
-        e.preventDefault()
-        console.log(`Bet of ${e.target.value} was placed`)
+    getProps = () => {
+        this.setState({
+            highLow: this.props.highLow
+        })
     }
 
-    handleSubmit = (e) => {
-        e.preventDefault()
-        console.log(`Bet of ${this.state.bet} was placed`)
-        console.log(`High-low is ${this.state.highLow}`)
+    qrcode = () => {
+        if (this.state.user_wallet !== null){
+            
+        }
+    }
+
+    calculateTime = () => {
+        const now = new Date();
+        let hour = now.getHours();
+        let nextHour = '';
+        if(hour !== 23){
+            nextHour = `${hour + 1}:00`;
+        } else {
+            nextHour = '00';
+        }
+        this.setState({
+            current_cycle: nextHour
+        });
     }
 
     enterAmount = (e) => {
@@ -103,82 +109,28 @@ export default class Form extends React.Component {
         })
     }
 
-    enterWallet = (e) => {
-        this.setState({
-            user_wallet: e.target.value
-        })
-        console.log(`wallet is:${this.state.user_wallet}`)
+    handleBet = (e) => {
+        e.preventDefault()
+        console.log(`bet placed = ${this.state.bet}`);
     }
 
-    getProps = () => {
-        this.setState({
-            highLow: this.props.highLow
-        })
+    updateCookies = (e) => {
+        const userIdCookie = new Cookies();
+        const betCookie = new Cookies();
+        userIdCookie.set('userId', 'userLocalWallet', { path: '/' });
+        betCookie.set('useBet', this.state.bet, { path: '/' });
+        console.log(userIdCookie.get('useBet')); // Amount
     }
-
-    storeUserData = () => {
-        console.log("************************************")
-        console.log(`Wallet is: ${this.state.user_wallet}`)
-        console.log(`Bet is: ${this.state.bet}`)
-        console.log(`Direction is: ${this.props.highLow}`)
-    }
-    
-    checkBet = (e) => {
-        e.preventDefault();
-        if(this.state.bet === null){
-            alert(`Please enter a valid bet (< $50)`);
-        } else if (this.state.bet > 50 || this.state.bet < 0){
-            alert(`${this.state.bet} is not a legal bet. Please try again!!`);
-        } else {
-            alert(`You bet ${this.state.bet} that the price of Bitcoin with go ${this.props.highLow}!!`);
-        }
-    }
-
-    qrcode = () => {
-        if (this.state.user_wallet !== null){
-
-        }
-    }
-
     componentDidMount() {
         //Escape key to exit form
-        document.addEventListener("keyup", this.onEsc)
-
-        // DB reads
-        this.getDataFromDb();
-            if (!this.state.intervalIsSet) {
-                let interval = setInterval(this.getDataFromDb, 1000);
-                this.setState({ intervalIsSet: interval });
-            }
+        document.addEventListener("keyup", this.onEsc);
+        this.calculateTime();
     }
 
     componentWillUnmount() {
     document.removeEventListener("keyup", this.onEsc)
-        if (this.state.intervalIsSet) {
-            clearInterval(this.state.intervalIsSet);
-            this.setState({ intervalIsSet: null });
-        }
     }
     
-    getDataFromDb = () => {
-        fetch("http://localhost:3001/api/getData")
-          .then(data => data.json())
-          .then(res => this.setState({ data: res.data }));
-      }; 
-    
-    putDataToDB = message => {
-    let currentIds = this.state.data.map(data => data.id);
-    let idToBeAdded = 0;
-    while (currentIds.includes(idToBeAdded)) {
-        ++idToBeAdded;
-    }
-
-    axios.post("http://localhost:3001/api/putData", {
-        id: idToBeAdded,
-        message: message
-    });
-    };
-
     render() {
         if (!this.props.show){
             return null
@@ -190,48 +142,29 @@ export default class Form extends React.Component {
                     <div>
                         <div style={upperClose} onClick={(e) => this.onClose(e)}>X</div>
                         
-                        <h3>You are betting {this.props.highLow}</h3>
-                        
-                        <form onSubmit={this.handleSubmit} autoComplete="off">
-                            
-                            {/* <div id="user-wallet" style={formElement}>
-                                <input id="wallet" onChange={(e) => {this.enterWallet(e)}} 
-                                    placeholder="Your wallet address (optional)"
-                                    style={inputField}/>
-                            </div> */}
-                            
-                            <div className="our-wallet" id="our-wallet" style={formElement}></div>
-                            
-                            <div style={formElement}>
-                                <input className="form-element" type='number' id="amount" 
-                                    onChange={(e) => {this.enterAmount(e)}} 
-                                    placeholder="Bet amount (Between 0 and 50$)"
-                                    style={inputField}/>
-                            </div>
-                            
-                            <div style={footerStyle} label="Close the form">
-                                <Button type="button" onClick=
-                                    {(e) => {
-                                        this.onClose(e); 
-                                        this.storeUserData();
-                                        this.checkBet(e)}}>Bet</Button>
-                            </div>
-                        </form> 
+                        <h3>You are betting that the price at {this.state.current_cycle} will go {this.props.highLow} than {this.state.cycle_value} </h3>
                     </div>
 
-                    <div>
-                        <h3>Our Wallet</h3>
-                        <p>0x69069F7589B35d5a436eCf4718EEE3402B2e3dab</p>
-                    </div>
                     <div label="QR code section" className="qrSection">
-                        <QRCode value={this.state.our_wallet} />
+                        <QRCode value={this.state.user_local_wallet} />
                     </div>
-                    
+                    <div>
+                        <p>Current cycle is until {this.state.current_cycle}</p>
+                    </div>
+                    <div>
+                        <p>Or if you want to play on free points:</p>
+                        <input type="number" onChange={(e) => {this.enterAmount(e)}}/>
+                        <button type="submit" onClick={(e) => {
+                            this.handleBet(e);
+                            this.onClose(e);
+                            this.updateCookies(e);
+                            }}>Bet</button>
+                    </div>
                 </div>
             </div>
         )
     }
-}
+} 
 
 Form.propTypes = {
     onClose: PropTypes.func.isRequired

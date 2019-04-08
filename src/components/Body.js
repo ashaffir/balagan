@@ -1,7 +1,7 @@
 import React from 'react';
 import PriceCard from './PriceCard';
+import Timing from './Timing';
 import Form from './Form.js';
-//import axios from 'axios';
 import FusionCharts from 'fusioncharts';
 import Charts from 'fusioncharts/fusioncharts.charts';
 import Widgets from 'fusioncharts/fusioncharts.widgets';
@@ -168,6 +168,7 @@ class Body extends React.Component{
             <div className="row col-12 mb-5 buttons-area">
                  <div className="card-deck custom-card-deck">
                     
+                    <PriceCard header="Bitcoin(LTC)"   src={'/bitcoin.png'} alt="fireSpot" label="(Price in USD)"  value={this.state.btcusd}/>
                     {/* <PriceCard header="Litecoin(LTC)"   src={'/litecoin.png'} alt="fireSpot" label="(Price in USD)"  value={this.state.ltcusd}/>
                     <PriceCard header="Ethereum(ETH)" src={'/ethereum.png'} alt="fireSpot" label="(Price in USD)"    value={this.state.ethusd}/> */}
                     
@@ -199,6 +200,9 @@ class Body extends React.Component{
                           </tr>
                         </tbody>
                       </table>
+                      
+                      <Timing />
+
                     </section>
                  </div>          
             </div>

@@ -6,7 +6,6 @@ import FaqPage from './pages/faq'
 import './index.css'
 import Main from './pages/main';
 import MainNavigation from './components/mainNavigation';
-import MongoDB from './components/MongoDB'
 
 
 class App extends Component {
@@ -36,7 +35,7 @@ class App extends Component {
 
         <div>
         {/* Backend Demo */}
-        <MongoDB />
+        {/* <MongoDB /> */}
         </div>
       </BrowserRouter>
       

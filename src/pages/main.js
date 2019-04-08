@@ -6,6 +6,7 @@ import "../../src/style.css";
 import '../index.css'
 import logo from '../img/sab-logo7.png'
 import Gamers from '../components/Gamers';
+import Footer from '../components/Footer';
 
 
 export default class Main extends Component {
@@ -36,6 +37,7 @@ export default class Main extends Component {
           <div className="container">
             <Body />
             <Gamers />
+            <Footer />
           </div>
         </div>
     );

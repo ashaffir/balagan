@@ -2,94 +2,49 @@ import React, { Component } from 'react';
 import './Gamers.css'
 
 export default class Gamers extends Component {
+    state = {
+        bets: []
+      }
+
+      getUsers = () => {
+        fetch('http://localhost:4000/bets')
+        .then(response => response.json())
+        .then(response => {this.setState ({bets: response.bets})})
+        .catch((err) => {
+          console.log(err)
+        })
+      }
+
+      componentDidMount () {
+        this.getUsers();
+      }
+
+    renderUser = ({user_local_wallet, direction, cycle_value, bet, result,user_wallet}) => 
+        <tr key={user_local_wallet}>  
+        <td className="gamers">{user_wallet}</td>
+        <td className="gamers">{direction}</td>
+        <td className="gamers">{cycle_value}</td>
+        <td className="gamers">{bet}</td>
+        <td className="gamers">{result}</td>
+        </tr> 
+    
     render () {
+
+        const { bets } = this.state;
+        console.log(bets)
+
+
         return (
             <table className="gamers">  
                 <tbody>
                     <tr>  
-                        <th>Wallet</th>
-                        <th>Amount</th>
-                        <th>Reference Value</th>
+                        <th>User ID</th>
                         <th>Direction</th>
+                        <th>Cycle Value</th>
+                        <th>Bet Amount</th>
                         <th>Won/Lost</th>
                     </tr>  
-                    <tr>  
-                        <td className="gamers">Apples</td>
-                        <td className="gamers">Carrots</td>
-                        <td className="gamers">Steak</td>
-                        <td className="gamers">Steak</td>
-                        <td className="gamers">Steak</td>
-                    </tr>  
-                    <tr>  
-                        <td className="gamers">Oranges</td>
-                        <td className="gamers">Potato</td>
-                        <td className="gamers">Pork</td>
-                        <td className="gamers">Pork</td>
-                        <td className="gamers">Pork</td>
-                    </tr>  
-                    <tr>  
-                        <td className="gamers">Pears</td>
-                        <td className="gamers">Peas</td>
-                        <td className="gamers">Pork</td>
-                        <td className="gamers">Pork</td>
-                        <td className="gamers">Chicken</td>
-                    </tr>  
-                    <tr>  
-                        <td className="gamers">Pears</td>
-                        <td className="gamers">Peas</td>
-                        <td className="gamers">Pork</td>
-                        <td className="gamers">Pork</td>
-                        <td className="gamers">Chicken</td>
-                    </tr>  
-                    <tr>  
-                        <td className="gamers">Pears</td>
-                        <td className="gamers">Peas</td>
-                        <td className="gamers">Pork</td>
-                        <td className="gamers">Pork</td>
-                        <td className="gamers">Chicken</td>
-                    </tr>  
-                    <tr>  
-                        <td className="gamers">Pears</td>
-                        <td className="gamers">Peas</td>
-                        <td className="gamers">Pork</td>
-                        <td className="gamers">Pork</td>
-                        <td className="gamers">Chicken</td>
-                    </tr>  
-                    <tr>  
-                        <td className="gamers">Pears</td>
-                        <td className="gamers">Peas</td>
-                        <td className="gamers">Pork</td>
-                        <td className="gamers">Pork</td>
-                        <td className="gamers">Chicken</td>
-                    </tr>  
-                    <tr>  
-                        <td className="gamers">Pears</td>
-                        <td className="gamers">Peas</td>
-                        <td className="gamers">Pork</td>
-                        <td className="gamers">Pork</td>
-                        <td className="gamers">Chicken</td>
-                    </tr>  
-                    <tr>  
-                        <td className="gamers">Pears</td>
-                        <td className="gamers">Peas</td>
-                        <td className="gamers">Pork</td>
-                        <td className="gamers">Pork</td>
-                        <td className="gamers">Chicken</td>
-                    </tr>  
-                    <tr>  
-                        <td className="gamers">Pears</td>
-                        <td className="gamers">Peas</td>
-                        <td className="gamers">Pork</td>
-                        <td className="gamers">Pork</td>
-                        <td className="gamers">Chicken</td>
-                    </tr>  
-                    <tr>  
-                        <td className="gamers">Pears</td>
-                        <td className="gamers">Peas</td>
-                        <td className="gamers">Pork</td>
-                        <td className="gamers">Pork</td>
-                        <td className="gamers">Chicken</td>
-                    </tr>  
+                    {bets.map(this.renderUser)}
                 </tbody>
             </table>  
         )
