@@ -24,7 +24,6 @@ export default class Main extends Component {
         <div className="App">
           <header className="App-header logo-section" align='center'>
             <img src={logo} alt="Swing@bit logo" />
-            
           </header>
           {/* Start Chart Section */}
           {/* <Chart /> */}

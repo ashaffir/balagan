@@ -9,6 +9,12 @@ import ReactFC from 'react-fusioncharts';
 import FusionTheme from 'fusioncharts/themes/fusioncharts.theme.fusion';
 import './Body.css'
 
+import Cookies from 'universal-cookie';
+
+const balanceCookie = new Cookies();
+let currentBalance = 0;
+
+
 ReactFC.fcRoot(FusionCharts, Charts, Widgets, FusionTheme);
 
 class Body extends React.Component{
@@ -168,7 +174,7 @@ class Body extends React.Component{
             <div className="row col-12 mb-5 buttons-area">
                  <div className="card-deck custom-card-deck">
                     
-                    <PriceCard header="Bitcoin(LTC)"   src={'/bitcoin.png'} alt="fireSpot" label="(Price in USD)"  value={this.state.btcusd}/>
+                    {/* <PriceCard header="Bitcoin(LTC)"   src={'/bitcoin.png'} alt="fireSpot" label="(Price in USD)"  value={this.state.btcusd}/> */}
                     {/* <PriceCard header="Litecoin(LTC)"   src={'/litecoin.png'} alt="fireSpot" label="(Price in USD)"  value={this.state.ltcusd}/>
                     <PriceCard header="Ethereum(ETH)" src={'/ethereum.png'} alt="fireSpot" label="(Price in USD)"    value={this.state.ethusd}/> */}
                     
@@ -211,6 +217,7 @@ class Body extends React.Component{
             show={this.state.show}
             highLow={this.state.highLow}>
           </Form>
+          <h3>Current balance is {balanceCookie.get('balance')}</h3>
 		</div>
         )
     }
