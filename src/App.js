@@ -7,8 +7,13 @@ import './index.css'
 import Main from './pages/main';
 import Cookies from 'universal-cookie';
 
+// Cookies
 const balanceCookie = new Cookies();
+const userIdCookie = new Cookies();
+
+const randomString = require('random-string');
 let currentBalance = 0;
+let user_id = '';
 
 class App extends Component {
  
@@ -17,19 +22,26 @@ class App extends Component {
     show: false,
     highLow: null,
     currentValue: null,
-    balance: 0
+    balance: 0,
+    user_id: 'none'
   }
 
-  checkbalance = () => {
+  componentDidMount(){
     currentBalance = balanceCookie.get('balance');
     console.log(`checkBalance= ${currentBalance}`)
+    user_id = randomString();
+
     if (isNaN(currentBalance)){
       balanceCookie.set('balance',10000, {path: '/'});
+      userIdCookie.set('user_id', user_id, {path:'/'});
       this.setState({
-        balance: 10000
+        balance: 10000,
+        user_id: user_id
       })
     }
   }
+
+
   render() {
     //Backend demo
     // const { data } = this.state;
@@ -49,8 +61,6 @@ class App extends Component {
         <div>
         {/* Backend Demo */}
         {/* <MongoDB /> */}
-        {/* <DomCookies balance={this.checkbalance()} bet={0}/> */}
-        {this.checkbalance()}
         </div>
       </BrowserRouter>
       

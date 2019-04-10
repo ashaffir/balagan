@@ -6,6 +6,7 @@ import "../../src/style.css";
 import '../index.css'
 import logo from '../img/sab-logo7.png'
 import Gamers from '../components/Gamers';
+import Players from '../components/Players';
 import Footer from '../components/Footer';
 
 
@@ -35,7 +36,8 @@ export default class Main extends Component {
           {/* <Header className="App-header" branding="Do you know if it will go up or down?" align='center'/> */}
           <div className="container">
             <Body />
-            <Gamers />
+            {/* <Gamers /> */}
+            <Players />
             <Footer />
           </div>
         </div>

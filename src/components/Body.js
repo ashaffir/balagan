@@ -12,7 +12,9 @@ import './Body.css'
 import Cookies from 'universal-cookie';
 
 const balanceCookie = new Cookies();
-let currentBalance = 0;
+let now = new Date();
+let hour = 0;
+let nextHour = 0;
 
 
 ReactFC.fcRoot(FusionCharts, Charts, Widgets, FusionTheme);
@@ -53,7 +55,8 @@ class Body extends React.Component{
                         "value": 0
                     }]
                 }]
-            }
+            },
+          cycle_value: 0
         };
         this.chartConfigs = {
             type: 'realtimeline',
@@ -72,20 +75,28 @@ class Body extends React.Component{
 
     startUpdatingData(){
         setInterval(() => {
+            now = new Date();
             fetch(this.BASE_URL + 'btc-usd')
             .then(res => res.json())
             .then(d => {
                 let x_axis = this.clientDateTime();
                 let y_axis = d.ticker.price;
-                console.log(`current fucking value = ${d.ticker.price}`);
                 this.setState({
                   btcusd: d.ticker.price
                 });
                 this.chartRef.feedData("&label=" + x_axis + "&value=" + y_axis);
-            });
-        }, 2000);
+              });
+              // console.log(parseInt(now.getSeconds()));
+              // console.log(parseInt(now.getMinutes()));
+              if(parseInt(now.getMinutes()) === 38){
+                // console.log('LLLLLL')
+                // this.setCycleValue(this.state.btcusd)
+                this.setState({
+                  cycle_value: parseInt(this.state.btcusd)
+                })
+              }  
+        }, 2000); // Data streaming to the graph, time interval - 2000 = 2sec
     }
-
 
     getDataFor(conversion, prop){
         fetch(this.BASE_URL + conversion, {
@@ -151,9 +162,25 @@ class Body extends React.Component{
   
     setDirection = (direction) => {
       this.setState({
-        highLow: direction
+        direction: direction
       })
     }
+
+    setCurrentCycle = () => {
+      now = new Date();
+      hour = now.getHours();
+      if (hour !== 23){
+        nextHour = `${hour+1}:00`
+      } else {
+        nextHour = '00:00'
+      }
+      this.setState({
+        current_cycle: `${hour}:00 - ${nextHour}`
+      })
+    }
+
+    
+
 
     render(){
         return (
@@ -185,7 +212,10 @@ class Body extends React.Component{
                             <td>
                               <div>
                                 <button className="push_button blue" onClick={
-                                  (e) => {this.showForm();this.setDirection('Up')}}>Will be Higher</button>
+                                  (e) => {
+                                    this.showForm();
+                                    this.setDirection('Up')
+                                    }}>Will be Higher</button>
                               </div>
                             </td>
                             <td>
@@ -200,7 +230,10 @@ class Body extends React.Component{
                             <td>
                               <div>
                                 <button type="button" className="push_button red" onClick={
-                                  (e) => {this.showForm();this.setDirection('Down')}}>Will be Lower</button>
+                                  (e) => {
+                                    this.showForm();
+                                    this.setDirection('Down');
+                                    }}>Will be Lower</button>
                               </div>
                             </td>
                           </tr>
@@ -215,8 +248,9 @@ class Body extends React.Component{
             <Form 
             onClose={this.showForm}
             show={this.state.show}
-            highLow={this.state.highLow}>
-          </Form>
+            direction={this.state.direction}
+            cycle_value={this.state.cycle_value} 
+            />
           <h3>Current balance is {balanceCookie.get('balance')}</h3>
 		</div>
         )

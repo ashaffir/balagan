@@ -62,9 +62,10 @@ let new_balance = 0;
 export default class Form extends React.Component {
     
     state = {
-        highLow: null,
-        current_cycle: 0,
-        cycle_value: 'CYCLE_VALUE',
+        direction: null,
+        current_cycle: null,
+        cycle_value: null,
+        bet_time: null,
         user_local_wallet: 'USER_LOCAL_WALLET',
         current_balance: 0,
         bet: 0
@@ -83,12 +84,6 @@ export default class Form extends React.Component {
         })
     }
 
-    getProps = () => {
-        this.setState({
-            highLow: this.props.highLow
-        })
-    }
-
     qrcode = () => {
         if (this.state.user_wallet !== null){
             
@@ -102,10 +97,12 @@ export default class Form extends React.Component {
         if(hour !== 23){
             nextHour = `${hour + 1}:00`;
         } else {
-            nextHour = '00';
+            nextHour = '00:00';
         }
         this.setState({
-            current_cycle: nextHour
+            // current_cycle: this.props.current_cycle,
+            nextHour: nextHour
+
         });
     }
 
@@ -123,7 +120,8 @@ export default class Form extends React.Component {
             balanceCookie.set('balance', new_balance, {path: '/'});
             this.setState({
                 current_balance: new_balance
-            })    
+            });
+
         } else if(current_balance > 0) {
             alert(`Please enter a bet lower or equal ${current_balance}`)
         } else {
@@ -131,6 +129,14 @@ export default class Form extends React.Component {
         }
         
     }
+
+    setBetTime () {
+        let now = new Date();
+        let time = `${now.getHours()}:${now.getMinutes()}`;
+        this.setState({
+          bet_time: time
+        })
+      }
 
     componentDidMount() {
         //Escape key to exit form
@@ -140,7 +146,9 @@ export default class Form extends React.Component {
 
     componentWillUnmount() {
     document.removeEventListener("keyup", this.onEsc)
-    }
+
+    console.log(`bet_time: ${this.state.bet_time}`)
+}
     
     render() {
         if (!this.props.show){
@@ -149,27 +157,33 @@ export default class Form extends React.Component {
         return (
             <div style ={backdropStyle}>
                 <div style={formStyle}>
-                    {this.props.children}
+                    {/* {this.props.children} */}
                     <div>
                         <div style={upperClose} onClick={(e) => this.onClose(e)}>X</div>
                         
-                        <h3>You are betting that the price at {this.state.current_cycle} will go {this.props.highLow} than {this.state.cycle_value} </h3>
+                        <h3>You are betting that the price at<span> </span>  
+                            {this.state.nextHour} will go<span> </span> 
+                            {this.props.direction} than<span> </span>
+                            {this.props.cycle_value} </h3>
                     </div>
 
                     <div label="QR code section" className="qrSection">
                         <QRCode value={this.state.user_local_wallet} />
                     </div>
                     <div>
-                        <p>Current cycle is until {this.state.current_cycle}</p>
+                        <p>Current cycle is until {this.state.nextHour}</p>
                     </div>
                     <div>
                         <p>Or if you want to play on free points:</p>
-                        <form onSubmit={(e) => {this.onClose(e);this.handleBet(e);}}>
+                        <form onSubmit={(e) => {
+                            this.onClose(e);
+                            this.handleBet(e);
+                            this.setBetTime();
+                            }}>
                             <input type="number" onChange={(e) => {this.enterAmount(e)}}/>
                             <input type='submit' value='Bet'/>
                         </form>
                     </div>
-                    {/* <DomCookies balance={this.state.current_balance}/> */}
                 </div>
             </div>
         )
