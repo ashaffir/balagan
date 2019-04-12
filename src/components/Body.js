@@ -85,16 +85,10 @@ class Body extends React.Component{
                   btcusd: d.ticker.price
                 });
                 this.chartRef.feedData("&label=" + x_axis + "&value=" + y_axis);
-              });
-              // console.log(parseInt(now.getSeconds()));
-              // console.log(parseInt(now.getMinutes()));
-              if(parseInt(now.getMinutes()) === 38){
-                // console.log('LLLLLL')
-                // this.setCycleValue(this.state.btcusd)
-                this.setState({
-                  cycle_value: parseInt(this.state.btcusd)
-                })
-              }  
+              })
+              .catch((err) => {
+                console.log(err)
+              });  
         }, 2000); // Data streaming to the graph, time interval - 2000 = 2sec
     }
 
@@ -122,6 +116,9 @@ class Body extends React.Component{
             this.setState({
                 [prop]: d.ticker.price
             });
+        })
+        .catch((err) => {
+          console.log(err)
         })
         
     }
@@ -166,21 +163,14 @@ class Body extends React.Component{
       })
     }
 
-    setCurrentCycle = () => {
-      now = new Date();
-      hour = now.getHours();
-      if (hour !== 23){
-        nextHour = `${hour+1}:00`
-      } else {
-        nextHour = '00:00'
-      }
-      this.setState({
-        current_cycle: `${hour}:00 - ${nextHour}`
-      })
+   async getCycleValue() {
+        await fetch('http://localhost:4000/cycle_value')
+        .then(response => response.json())
+        .then(response => {this.setState ({cycle_value: response['cycle_value'][0]['cycle_value']})})
+        .catch((err) => {
+          console.log(err)
+        })
     }
-
-    
-
 
     render(){
         return (
@@ -233,6 +223,7 @@ class Body extends React.Component{
                                   (e) => {
                                     this.showForm();
                                     this.setDirection('Down');
+                                    this.getCycleValue();
                                     }}>Will be Lower</button>
                               </div>
                             </td>

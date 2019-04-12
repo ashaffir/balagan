@@ -8,7 +8,9 @@ import PropTypes from 'prop-types';
 import QRCode from 'qrcode.react'; //https://www.npmjs.com/package/qrcode.react;
 import './Form.css';
 import Cookies from 'universal-cookie';
+// import connection from '../utils/db';
 
+const userIdCookie = new Cookies();
 
 const backdropStyle = {
     position: 'fixed',
@@ -68,6 +70,7 @@ export default class Form extends React.Component {
         bet_time: null,
         user_local_wallet: 'USER_LOCAL_WALLET',
         current_balance: 0,
+        user_id: 'nana',
         bet: 0
     };
 
@@ -141,14 +144,25 @@ export default class Form extends React.Component {
     componentDidMount() {
         //Escape key to exit form
         document.addEventListener("keyup", this.onEsc);
+        this.setState({
+            user_id: userIdCookie.get('user_id')
+        })
         this.calculateTime();
     }
 
     componentWillUnmount() {
-    document.removeEventListener("keyup", this.onEsc)
+        document.removeEventListener("keyup", this.onEsc)
+        console.log(`bet_time: ${this.state.bet_time}`)
+    }
 
-    console.log(`bet_time: ${this.state.bet_time}`)
-}
+    updatePlayersTable() {
+        
+        let PLAYER_BET_ADD = `http://localhost:4000/players_bets/add?uid=${this.state.user_id}&direction=${this.props.direction}&cycle_value=${this.props.cycle_value}&bet=${this.state.bet}`;
+        console.log(PLAYER_BET_ADD);
+        fetch(PLAYER_BET_ADD)
+        // .then(this.getProducts)
+        .catch(err => console.log(err));
+    }
     
     render() {
         if (!this.props.show){
@@ -179,6 +193,7 @@ export default class Form extends React.Component {
                             this.onClose(e);
                             this.handleBet(e);
                             this.setBetTime();
+                            this.updatePlayersTable();
                             }}>
                             <input type="number" onChange={(e) => {this.enterAmount(e)}}/>
                             <input type='submit' value='Bet'/>

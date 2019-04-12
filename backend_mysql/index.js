@@ -5,6 +5,8 @@ Creating the database:
 CREATE DATABASE swingabit;
 */
 
+const cycleValue = require('./cycleValue.js');
+
 const express = require('express');
 const cors = require('cors');
 const mysql = require('mysql');
@@ -16,8 +18,11 @@ app.use(cors());
 const CREATE_BETS_TABLE = 'CREATE TABLE IF NOT EXISTS betting_table (idx INT AUTO_INCREMENT, user_local_wallet VARCHAR(35), direction VARCHAR(5), cycle_value FLOAT(7,3), bet_time TIMESTAMP, bet FLOAT(5,4), user_wallet VARCHAR(35), result INT, payout FLOAT(5,4), status BOOLEAN ,PRIMARY KEY (idx));';
 const CREATE_PLAYERS_TABLE = 'CREATE TABLE IF NOT EXISTS players_table (idx INT AUTO_INCREMENT, user_id VARCHAR(35), direction VARCHAR(5), cycle_value FLOAT(7,3), bet_time TIMESTAMP, bet FLOAT(5,4), result INT, payout FLOAT(5,4), status BOOLEAN ,PRIMARY KEY (idx));';
 
+
 const SELECT_ALL_ENTRIES = 'SELECT * FROM betting_table';
 const SELECT_ALL_PLAYERS = 'SELECT * FROM players_table';
+const SELECT_CURRENT_CYCLE_VALUE = 'SELECT * FROM cycle_value_table WHERE minutes=0 AND hours=';
+
 const DB_PORT = 4000;
 
 const connection = mysql.createConnection({
@@ -62,6 +67,23 @@ app.get('/bets', (req,res) => {
     })
 })
 
+//Presenting the current cycle value
+app.get('/cycle_value', (req,res) => {
+    let hour = parseInt(new Date().getHours());
+    connection.query(`${SELECT_CURRENT_CYCLE_VALUE}${hour} limit 1`, (err, result) => {
+        if(err) {
+            return res.send(err)
+        } else {
+            return res.json({
+                cycle_value: result
+            })
+        }
+    })
+})
+
+cycleValue.writeCycleValue()
+
+
 app.get('/players', (req,res) => {
     connection.query(SELECT_ALL_PLAYERS, (err, result) => {
         if(err) {
@@ -87,11 +109,12 @@ app.get('/bets/add', (req, res) => {
 })
 
 app.get('/players_bets/add', (req, res) => {
-    const { uid, direction, cycle_value } = req.query;
-    const ADD_NEW_BET = `INSERT INTO players_table (user_id, direction, cycle_value) VALUES ('${uid}','${direction}','${cycle_value}')`;
+    const { uid, direction, cycle_value, bet } = req.query;
+    const ADD_NEW_BET = `INSERT INTO players_table (user_id, direction, cycle_value, bet) 
+                         VALUES ('${uid}','${direction}','${cycle_value}','${bet}')`;
     connection.query(ADD_NEW_BET, err => {
         if(err){
-            res.send('Error adding a players bet!') 
+            res.send(`Error adding a players bet. ${err}`) 
         } else {
             res.send(`Added a new players bet: ${uid} going ${direction} from ${cycle_value}.`)
         }

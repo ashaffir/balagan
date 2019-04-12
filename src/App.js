@@ -13,7 +13,7 @@ const userIdCookie = new Cookies();
 
 const randomString = require('random-string');
 let currentBalance = 0;
-let user_id = '';
+let uid = '';
 
 class App extends Component {
  
@@ -29,14 +29,14 @@ class App extends Component {
   componentDidMount(){
     currentBalance = balanceCookie.get('balance');
     console.log(`checkBalance= ${currentBalance}`)
-    user_id = randomString();
+    uid = randomString();
 
     if (isNaN(currentBalance)){
       balanceCookie.set('balance',10000, {path: '/'});
-      userIdCookie.set('user_id', user_id, {path:'/'});
+      userIdCookie.set('user_id', uid, {path:'/'});
       this.setState({
         balance: 10000,
-        user_id: user_id
+        user_id: uid
       })
     }
   }

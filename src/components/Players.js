@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './Players.css'
 
+
 export default class Players extends Component {
     state = {
         players_bets: [],
@@ -37,16 +38,20 @@ export default class Players extends Component {
         .catch(err => console.log(err))
     }
 
+    keyGen = (uid) => {
+        let key = uid + '_' + new Date().getTime();
+        return key
+    }
       componentDidMount () {
         this.getPlayers();
       }
 
-    renderUser = ({user_id, direction, cycle_value, players_bet, result,user_wallet}) => 
-        <tr key={user_id}>  
-            <td className="players">{user_wallet}</td>
+    renderUser = ({user_id, direction, cycle_value, bet, result,user_wallet}) => 
+        <tr key={user_id}> 
+            <td className="players">{user_id}</td>
             <td className="players">{direction}</td>
             <td className="players">{cycle_value}</td>
-            <td className="players">{players_bet}</td>
+            <td className="players">{bet}</td>
             <td className="players">{result}</td>
         </tr> 
     
