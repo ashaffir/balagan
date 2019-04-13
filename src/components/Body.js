@@ -12,6 +12,7 @@ import './Body.css'
 import Cookies from 'universal-cookie';
 
 const balanceCookie = new Cookies();
+const uid_cookie = new Cookies();
 let now = new Date();
 let hour = 0;
 let nextHour = 0;
@@ -56,7 +57,8 @@ class Body extends React.Component{
                     }]
                 }]
             },
-          cycle_value: 0
+          cycle_value: 0,
+          user_id: ''
         };
         this.chartConfigs = {
             type: 'realtimeline',
@@ -163,6 +165,13 @@ class Body extends React.Component{
       })
     }
 
+    getUserId = () => {
+      this.setState({
+        user_id: uid_cookie.get('user_id')
+      }) 
+    }
+
+
    async getCycleValue() {
         await fetch('http://localhost:4000/cycle_value')
         .then(response => response.json())
@@ -205,6 +214,8 @@ class Body extends React.Component{
                                   (e) => {
                                     this.showForm();
                                     this.setDirection('Up')
+                                    this.getCycleValue();
+                                    this.getUserId();
                                     }}>Will be Higher</button>
                               </div>
                             </td>
@@ -224,6 +235,7 @@ class Body extends React.Component{
                                     this.showForm();
                                     this.setDirection('Down');
                                     this.getCycleValue();
+                                    this.getUserId();
                                     }}>Will be Lower</button>
                               </div>
                             </td>
@@ -240,7 +252,8 @@ class Body extends React.Component{
             onClose={this.showForm}
             show={this.state.show}
             direction={this.state.direction}
-            cycle_value={this.state.cycle_value} 
+            cycle_value={this.state.cycle_value}
+            user_id={this.state.user_id}
             />
           <h3>Current balance is {balanceCookie.get('balance')}</h3>
 		</div>

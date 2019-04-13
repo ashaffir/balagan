@@ -16,7 +16,7 @@ const app = express();
 app.use(cors());
 
 const CREATE_BETS_TABLE = 'CREATE TABLE IF NOT EXISTS betting_table (idx INT AUTO_INCREMENT, user_local_wallet VARCHAR(35), direction VARCHAR(5), cycle_value FLOAT(7,3), bet_time TIMESTAMP, bet FLOAT(5,4), user_wallet VARCHAR(35), result INT, payout FLOAT(5,4), status BOOLEAN ,PRIMARY KEY (idx));';
-const CREATE_PLAYERS_TABLE = 'CREATE TABLE IF NOT EXISTS players_table (idx INT AUTO_INCREMENT, user_id VARCHAR(35), direction VARCHAR(5), cycle_value FLOAT(7,3), bet_time TIMESTAMP, bet FLOAT(5,4), result INT, payout FLOAT(5,4), status BOOLEAN ,PRIMARY KEY (idx));';
+const CREATE_PLAYERS_TABLE = 'CREATE TABLE IF NOT EXISTS players_table (idx INT AUTO_INCREMENT, user_id VARCHAR(35), direction VARCHAR(5), cycle_value FLOAT(7,3), bet_time TIMESTAMP, bet INT,w-bet INT,result INT, payout FLOAT(5,4), status BOOLEAN ,PRIMARY KEY (idx));';
 
 
 const SELECT_ALL_ENTRIES = 'SELECT * FROM betting_table';

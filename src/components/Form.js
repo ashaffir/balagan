@@ -157,7 +157,7 @@ export default class Form extends React.Component {
 
     updatePlayersTable() {
         
-        let PLAYER_BET_ADD = `http://localhost:4000/players_bets/add?uid=${this.state.user_id}&direction=${this.props.direction}&cycle_value=${this.props.cycle_value}&bet=${this.state.bet}`;
+        let PLAYER_BET_ADD = `http://localhost:4000/players_bets/add?uid=${this.props.user_id}&direction=${this.props.direction}&cycle_value=${this.props.cycle_value}&bet=${this.state.bet}`;
         console.log(PLAYER_BET_ADD);
         fetch(PLAYER_BET_ADD)
         // .then(this.getProducts)

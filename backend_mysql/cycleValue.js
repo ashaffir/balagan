@@ -3,9 +3,6 @@ const mysql = require('mysql');
 const fetch = require("node-fetch");
 
 const TICKER_URL = 'https://cors.io/?https://api.cryptonator.com/api/ticker/';
-// let cycle_value = 0;
-// let current_value = 0;
-// let cycle_hour = 0;
 
 const CREATE_CYCLE_VALUE_TABLE = 'CREATE TABLE IF NOT EXISTS cycle_value_table (idx INT AUTO_INCREMENT, cycle_value FLOAT(8,3), hour INT, minutes INT, time TIMESTAMP, PRIMARY KEY (idx));';
 
@@ -51,73 +48,8 @@ const writeCycleValue = () => {
 }
 
 
-// writeCycleValue();
-
-
-// const writeCylceValue = () => {
-//     setInterval(() => {
-//         fetch(TICKER_URL + 'btc-usd')
-//             .then(res => res.json())
-//             .then(d => {
-//                 current_value = d.ticker.price;
-//                 console.log(`cycle hour: ${cycle_hour}  cycle value: ${cycle_value}  current value: ${current_value}`);
-//                 return current_value;
-//             });
-//     }, 1000);
-
-//     if(parseInt(new Date().getMinutes()) === 41){
-//         cycle_value = current_value;
-//         cycle_hour = parseInt(new Date().getHours());
-//     }
-    
-//     return {
-//         current_value: current_value,
-//         cycle_value: cycle_value,
-//         cycle_hour: cycle_hour
-
-//     }
-// }
-
-// async function getData() {
-//     await fetch(TICKER_URL + 'btc-usd')
-//     .then(res => res.json())
-//     .then(d => {
-//         current_data = d.ticker.price;
-//     });
-
-//     console.log(`response = ${current_data}`);
-
-//     return current_data
-
-// }
-
-
-// function updateResults() {
-
-// }
-
-// function updatePayout() {
-
-// }
-
-// function updateStatus() {
-
-// }
-
-// // setTimeout(() => {
-// //     writeCylceValue()
-// // }, 1000);
-
-// writeCylceValue();
 
 
 module.exports = {
     writeCycleValue
 };
-//     cycle_value,
-//     setCurrentValue,
-//     // setCycleValue,
-//     updateResults,
-//     updatePayout,
-//     updateStatus
-// };
