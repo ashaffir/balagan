@@ -3,7 +3,7 @@
 const mysql = require('mysql');
 
 // Maintenance commands
-const CLEAN_DB = `select * from cycle_value_table table where bet_time < date_sub(now(), interval 2 hour);`;
+const CLEAN_DB = `delete from cycle_value_table where time < date_sub(now(), interval 3 hour);`;
 
 class Database {
     constructor() {
@@ -57,7 +57,13 @@ Connection.connect(err => {
     } 
 });
 
+async function cleanCycleValue(){
+    console.log(`Cleaning the DB at ${new Date().getTime()}`);
+    await Connection.query(CLEAN_DB);
+}
+
 module.exports = {
     Database: Database,
-    Conncetion: Connection
+    Conncetion: Connection,
+    cleaDB: cleanCycleValue
 }

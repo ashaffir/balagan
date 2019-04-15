@@ -2,6 +2,7 @@
 const mysql = require('mysql');
 const fetch = require("node-fetch");
 const result = require('../src/utils/result');
+const db = require('../src/utils/db');
 
 
 const TICKER_URL = 'https://cors.io/?https://api.cryptonator.com/api/ticker/';
@@ -78,6 +79,9 @@ setInterval(async () => {
         await resCalc().catch((err) => {console.log(`failed at resCalc ${err}`)});
 }, 300000);
 
+setInterval(async () => {
+    await db.cleaDB().catch((err) => {console.log(`failed at cleaning DB ${err}`)});
+}, 3600000);
 
 module.exports = {
     writeCycleValue

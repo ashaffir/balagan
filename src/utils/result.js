@@ -94,7 +94,7 @@ const db = new Database(params);
 ///////////////////////////
 
 function resultsCalculation(){
-    console.log(`IN RESULTS...`)
+    console.log(`RUNNING RESULTS...`)
     db.query(`${SELECT_PREV_CYCLE_VALUE}${parseInt(new Date().getHours())-1} limit 1;`)
         .then(prev_cycle => { // result from the SELECT_PREV_CYCLE_VALUE => getting the previous cycle_value
             prev_value = prev_cycle[0]['cycle_value'];
