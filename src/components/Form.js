@@ -152,13 +152,19 @@ export default class Form extends React.Component {
 
     componentWillUnmount() {
         document.removeEventListener("keyup", this.onEsc)
-        console.log(`bet_time: ${this.state.bet_time}`)
+        // console.log(`bet_time: ${this.state.bet_time}`)
     }
 
     updatePlayersTable() {
-        
-        let PLAYER_BET_ADD = `http://localhost:4000/players_bets/add?uid=${this.props.user_id}&direction=${this.props.direction}&cycle_value=${this.props.cycle_value}&bet=${this.state.bet}`;
-        console.log(PLAYER_BET_ADD);
+        let uid = this.props.user_id;
+        let direction = this.props.direction;
+        let cycle_value = this.props.cycle_value;
+        let bet = this.state.bet;
+        let min = parseInt(new Date().getMinutes());
+        let w_bet = (60 - min)*bet;
+
+        let PLAYER_BET_ADD = `http://localhost:4000/players_bets/add?uid=${uid}&direction=${direction}&cycle_value=${cycle_value}&bet=${bet}&w_bet=${w_bet}`;
+        // console.log(PLAYER_BET_ADD);
         fetch(PLAYER_BET_ADD)
         // .then(this.getProducts)
         .catch(err => console.log(err));

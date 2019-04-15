@@ -25,7 +25,6 @@ connection.query(CREATE_CYCLE_VALUE_TABLE, err => {
     }
 })
 
-
 const writeCycleValue = () => {
       
     setInterval(() => {
@@ -44,9 +43,29 @@ const writeCycleValue = () => {
             .catch((err) => {
                 console.log(err)
             });
-    }, 15000);
+    }, 5000);
+
+    // setInterval(() => {
+    //     BlockchainTicker();    //Every 15 min refresh rate
+    //     coinDeskTicker();
+    // }, 5000)
 }
 
+
+async function BlockchainTicker(){
+    let data = await fetch('https://blockchain.info/ticker');
+    let main = await data.json();
+    console.log(`data from Blockchian.info: ${main['USD']['last']}`);
+}
+
+
+async function coinDeskTicker() {
+    let data = await fetch ('https://api.coindesk.com/v1/bpi/currentprice.json');
+    let main = await data.json();
+    console.log(`data from CoinSesk: ${main['bpi']['USD']['rate']}`);
+}
+
+coinDeskTicker();
 
 
 

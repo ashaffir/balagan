@@ -67,7 +67,9 @@ app.get('/bets', (req,res) => {
     })
 })
 
-//Presenting the current cycle value
+// Cycle Value Section
+
+// Presenting the current cycle value
 app.get('/cycle_value', (req,res) => {
     let hour = parseInt(new Date().getHours());
     connection.query(`${SELECT_CURRENT_CYCLE_VALUE}${hour} limit 1`, (err, result) => {
@@ -81,8 +83,9 @@ app.get('/cycle_value', (req,res) => {
     })
 })
 
+// Updating the DB with the current BTC/USD rate
 cycleValue.writeCycleValue()
-
+//////////////// END CYCLE VALUE ESECTION //////////////////
 
 app.get('/players', (req,res) => {
     connection.query(SELECT_ALL_PLAYERS, (err, result) => {
@@ -109,9 +112,9 @@ app.get('/bets/add', (req, res) => {
 })
 
 app.get('/players_bets/add', (req, res) => {
-    const { uid, direction, cycle_value, bet } = req.query;
-    const ADD_NEW_BET = `INSERT INTO players_table (user_id, direction, cycle_value, bet) 
-                         VALUES ('${uid}','${direction}','${cycle_value}','${bet}')`;
+    const { uid, direction, cycle_value, bet, w_bet } = req.query;
+    const ADD_NEW_BET = `INSERT INTO players_table (user_id, direction, cycle_value, bet, w_bet) 
+                         VALUES ('${uid}','${direction}','${cycle_value}','${bet}', '${w_bet}')`;
     connection.query(ADD_NEW_BET, err => {
         if(err){
             res.send(`Error adding a players bet. ${err}`) 
