@@ -17,6 +17,7 @@ app.use(cors());
 
 const CREATE_BETS_TABLE = 'CREATE TABLE IF NOT EXISTS betting_table (idx INT AUTO_INCREMENT, user_local_wallet VARCHAR(35), direction VARCHAR(5), cycle_value FLOAT(7,3), bet_time TIMESTAMP, bet FLOAT(5,4), user_wallet VARCHAR(35), result INT, payout FLOAT(5,4), status BOOLEAN ,PRIMARY KEY (idx));';
 const CREATE_PLAYERS_TABLE = 'CREATE TABLE IF NOT EXISTS players_table (idx INT AUTO_INCREMENT, user_id VARCHAR(35), direction VARCHAR(5), cycle_value FLOAT(7,3), bet_time TIMESTAMP, bet INT,w-bet INT,result INT, payout FLOAT(5,4), status BOOLEAN ,PRIMARY KEY (idx));';
+const CREATE_CYCLE_VALUE_TABLE = 'CREATE TABLE IF NOT EXISTS cycle_value_table (idx INT AUTO_INCREMENT, cycle_value FLOAT(8,3), time TIMESTAMP, PRIMARY KEY (idx));';
 
 
 const SELECT_ALL_ENTRIES = 'SELECT * FROM betting_table';
@@ -49,7 +50,6 @@ connection.query(CREATE_PLAYERS_TABLE, err => {
         console.log('Failed to create players_table'); 
     }
 })
-
 
 app.get('/', (req, res) => {
     res.send('You are at the right place')
@@ -84,7 +84,9 @@ app.get('/cycle_value', (req,res) => {
 })
 
 // Updating the DB with the current BTC/USD rate
-cycleValue.writeCycleValue()
+// cycleValue.writeCycleValue();
+// cycleValue.resCalc();
+
 //////////////// END CYCLE VALUE ESECTION //////////////////
 
 app.get('/players', (req,res) => {
@@ -177,6 +179,6 @@ app.get('/bets/update_status', (req, res) => {
 })
 
 app.listen(DB_PORT, () => {
-    console.log(`Listening on port ${DB_PORT}`)
+    console.log(`Listening on port ${DB_PORT}`) 
 })
 

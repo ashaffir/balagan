@@ -1,6 +1,8 @@
 // This module will handle all calculations in the backend
 const mysql = require('mysql');
 const fetch = require("node-fetch");
+const result = require('../src/utils/result');
+
 
 const TICKER_URL = 'https://cors.io/?https://api.cryptonator.com/api/ticker/';
 
@@ -43,7 +45,7 @@ const writeCycleValue = () => {
             .catch((err) => {
                 console.log(err)
             });
-    }, 5000);
+        }, 5000);
 
     // setInterval(() => {
     //     BlockchainTicker();    //Every 15 min refresh rate
@@ -51,6 +53,7 @@ const writeCycleValue = () => {
     // }, 5000)
 }
 
+writeCycleValue();
 
 async function BlockchainTicker(){
     let data = await fetch('https://blockchain.info/ticker');
@@ -65,10 +68,18 @@ async function coinDeskTicker() {
     console.log(`data from CoinSesk: ${main['bpi']['USD']['rate']}`);
 }
 
-coinDeskTicker();
+// coinDeskTicker();
 
+async function resCalc(){
+    await result.resultsCalculation(); 
+}
+
+setInterval(async () => {
+        await resCalc().catch((err) => {console.log(`failed at resCalc ${err}`)});
+}, 300000);
 
 
 module.exports = {
     writeCycleValue
+    // resCalc
 };
