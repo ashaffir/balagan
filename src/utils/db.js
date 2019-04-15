@@ -3,7 +3,7 @@
 const mysql = require('mysql');
 
 // Maintenance commands
-const CLEAN_DB = `select * from cycle_value_table table where bet_time <> Date_sub(now(), interval 2 hour);`;
+const CLEAN_DB = `select * from cycle_value_table table where bet_time < date_sub(now(), interval 2 hour);`;
 
 class Database {
     constructor() {
