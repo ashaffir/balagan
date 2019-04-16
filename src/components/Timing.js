@@ -14,7 +14,7 @@ export default class Timing extends Component {
     render() {
         return (
             <div>
-                <h4>There are {this.getMinutesUntilNextHour()} minutes remain for this cycle.</h4>
+                <h4>There are {this.getMinutesUntilNextHour()} minutes remain for this cycle rate: {this.props.cycle_value}.</h4>
             </div>
             );
         }

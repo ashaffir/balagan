@@ -73,6 +73,7 @@ class Body extends React.Component{
         this.getDataFor('btc-usd', 'btcusd');
         this.getDataFor('ltc-usd', 'ltcusd');
         this.getDataFor('eth-usd', 'ethusd');
+        this.getCycleValue();
     }
 
     startUpdatingData(){
@@ -197,6 +198,9 @@ class Body extends React.Component{
                     </div>
                   </div>
             </div>
+            <div>
+              <h4>Your free points balance is <b>{balanceCookie.get('balance')}</b></h4>
+            </div>
             <div className="row col-12 mb-5 buttons-area">
                  <div className="card-deck custom-card-deck">
                     
@@ -243,7 +247,7 @@ class Body extends React.Component{
                         </tbody>
                       </table>
                       
-                      <Timing />
+                      <Timing cycle_value={this.state.cycle_value}/>
 
                     </section>
                  </div>          
@@ -255,7 +259,6 @@ class Body extends React.Component{
             cycle_value={this.state.cycle_value}
             user_id={this.state.user_id}
             />
-          <h3>Current balance is {balanceCookie.get('balance')}</h3>
 		</div>
         )
     }

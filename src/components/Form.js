@@ -152,7 +152,7 @@ export default class Form extends React.Component {
 
     componentWillUnmount() {
         document.removeEventListener("keyup", this.onEsc)
-        // console.log(`bet_time: ${this.state.bet_time}`)
+        console.log(`bet_time: ${this.state.bet_time}`)
     }
 
     updatePlayersTable() {

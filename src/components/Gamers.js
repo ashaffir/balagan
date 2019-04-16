@@ -37,6 +37,10 @@ export default class Gamers extends Component {
         return (
             <table className="gamers">  
                 <tbody>
+                    <tr>
+                      <td>
+                      </td>
+                    </tr>
                     <tr>  
                         <th>User ID</th>
                         <th>Direction</th>

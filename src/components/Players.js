@@ -10,6 +10,7 @@ export default class Players extends Component {
             direciton: 'side',
             cycle_value: 0,
             bet_time: 12,
+            payout: 0,
             bet: 111
         }
 
@@ -46,13 +47,14 @@ export default class Players extends Component {
         this.getPlayers();
       }
 
-    renderUser = ({user_id, direction, cycle_value, bet, result,user_wallet}) => 
+    renderUser = ({user_id, direction, cycle_value, bet, bet_time,payout}) => 
         <tr key={user_id}> 
             <td className="players">{user_id}</td>
             <td className="players">{direction}</td>
             <td className="players">{cycle_value}</td>
             <td className="players">{bet}</td>
-            <td className="players">{result}</td>
+            <td className="players">{bet_time}</td>
+            <td className="players">{payout}</td>
         </tr> 
     
     render () {
@@ -63,13 +65,15 @@ export default class Players extends Component {
 
         return (
             <table className="players">  
+            <h2>Winners Table</h2>
                 <tbody>
                     <tr>  
                         <th>User ID</th>
                         <th>Direction</th>
                         <th>Cycle Value</th>
                         <th>Bet Amount</th>
-                        <th>Won/Lost</th>
+                        <th>Bet Time</th>
+                        <th>Payout</th>
                     </tr>  
                     {players_bets.map(this.renderUser)}
                 </tbody>
