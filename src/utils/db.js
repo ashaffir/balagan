@@ -2,8 +2,15 @@
 
 const mysql = require('mysql');
 
+// Creating the tables queries:
+const CREATE_PLAYERS_TABLE = 'CREATE TABLE IF NOT EXISTS players_table (idx INT AUTO_INCREMENT, user_id VARCHAR(35), direction VARCHAR(5), cycle_value FLOAT(8,4), time TIMESTAMP, bet_hour int, bet_minutes int, bet INT,w-bet INT,result INT, payout FLOAT(10,4), status BOOLEAN ,PRIMARY KEY (idx));';
+const CREATE_CYCLE_VALUE_TABLE = 'CREATE TABLE IF NOT EXISTS cycle_value_table (idx INT AUTO_INCREMENT, cycle_value FLOAT(10,4), hours  int, minutes int, time TIMESTAMP, PRIMARY KEY (idx));';
+const CREATE_BETS_TABLE = 'CREATE TABLE IF NOT EXISTS betting_table (idx INT AUTO_INCREMENT, user_local_wallet VARCHAR(35), direction VARCHAR(5), cycle_value FLOAT(7,3), bet_time TIMESTAMP, bet FLOAT(5,4), user_wallet VARCHAR(35), result INT, payout FLOAT(5,4), status BOOLEAN ,PRIMARY KEY (idx));';
+
+
 // Maintenance commands
-const CLEAN_DB = `delete from cycle_value_table where time < date_sub(now(), interval 3 hour);`;
+const CLEAN_DB_CYCLE_VALUE = `delete from cycle_value_table where time < date_sub(now(), interval 3 hour);`;
+const CLEAN_DB_UPDATE_OLD_PLAYERS_STATUS = `update players_table set status=0 where status is NULL and time < date_sub(now(), interval 1 hour);`
 
 class Database {
     constructor() {
@@ -44,6 +51,8 @@ class Database {
     }
 }
 
+
+
 const Connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
@@ -57,13 +66,43 @@ Connection.connect(err => {
     } 
 });
 
+Connection.query(CREATE_PLAYERS_TABLE, err => {
+    if(err){
+        console.log('Failed to create players_table'); 
+    } else {
+        console.log(`PLAYERS TABLE CREATED AT: ${new Date().toLocaleString()}`);
+    }
+})
+
+Connection.query(CREATE_CYCLE_VALUE_TABLE, err => {
+    if(err){
+        console.log('Failed to create players_table'); 
+    } else {
+        console.log(`CYCLE VALUE TABLE CREATED AT: ${new Date().toLocaleString()}`);
+    }
+})
+
+
+Connection.query(CREATE_BETS_TABLE, err => {
+    if(err){
+        console.log('Failed to create betting_table'); 
+    } else {
+        console.log(`BETS TABLE CREATED AT: ${new Date().toLocaleString()}`);
+    }
+})
+
+
 async function cleanCycleValue(){
-    console.log(`Cleaning the DB at ${new Date().getTime()}`);
-    await Connection.query(CLEAN_DB);
+    await Connection.query(CLEAN_DB_CYCLE_VALUE);
+}
+
+async function updatePlayersStatus(){
+    await Connection.query(CLEAN_DB_UPDATE_OLD_PLAYERS_STATUS);
 }
 
 module.exports = {
     Database: Database,
     Conncetion: Connection,
-    cleaDB: cleanCycleValue
+    cleanCycleValue: cleanCycleValue,
+    updatePlayersStatus: updatePlayersStatus
 }

@@ -80,8 +80,14 @@ setInterval(async () => {
 }, 300000);
 
 setInterval(async () => {
-    await db.cleaDB().catch((err) => {console.log(`failed at cleaning DB ${err}`)});
+    console.log(`Cleaning the Cycle value DB at ${new Date().toLocaleString()}`)
+    await db.cleanCyclevalue().catch((err) => {console.log(`failed at cleaning DB ${err}`)});
 }, 3600000);
+
+setInterval(async() => {
+    console.log(`Updating DB status for old players at ${new Date().toLocaleString()}`)
+    await db.updatePlayersStatus().catch((err) => { console.log(`failed to update DB status for old players ${err}`)});
+}, 1800000)
 
 module.exports = {
     writeCycleValue

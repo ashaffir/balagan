@@ -15,13 +15,8 @@ const app = express();
 
 app.use(cors());
 
-const CREATE_BETS_TABLE = 'CREATE TABLE IF NOT EXISTS betting_table (idx INT AUTO_INCREMENT, user_local_wallet VARCHAR(35), direction VARCHAR(5), cycle_value FLOAT(7,3), bet_time TIMESTAMP, bet FLOAT(5,4), user_wallet VARCHAR(35), result INT, payout FLOAT(5,4), status BOOLEAN ,PRIMARY KEY (idx));';
-const CREATE_PLAYERS_TABLE = 'CREATE TABLE IF NOT EXISTS players_table (idx INT AUTO_INCREMENT, user_id VARCHAR(35), direction VARCHAR(5), cycle_value FLOAT(7,3), bet_time TIMESTAMP, bet INT,w-bet INT,result INT, payout FLOAT(5,4), status BOOLEAN ,PRIMARY KEY (idx));';
-const CREATE_CYCLE_VALUE_TABLE = 'CREATE TABLE IF NOT EXISTS cycle_value_table (idx INT AUTO_INCREMENT, cycle_value FLOAT(8,3), time TIMESTAMP, PRIMARY KEY (idx));';
-
-
 const SELECT_ALL_ENTRIES = 'SELECT * FROM betting_table';
-const SELECT_ALL_PLAYERS = 'SELECT * FROM players_table where result=1 and bet_hour='; //Displaying only the winners
+const SELECT_ALL_PLAYERS = 'SELECT * FROM players_table where result=1 and time > date_sub(now(), interval 1 hour)'; //Displaying only the winners
 const SELECT_CURRENT_CYCLE_VALUE = 'SELECT * FROM cycle_value_table WHERE minutes=0 AND hours=';
 
 const DB_PORT = 4000;
@@ -38,18 +33,6 @@ connection.connect(err => {
         console.log(err)
     } 
 });
-
-connection.query(CREATE_BETS_TABLE, err => {
-    if(err){
-        console.log('Failed to create betting_table'); 
-    }
-})
-
-connection.query(CREATE_PLAYERS_TABLE, err => {
-    if(err){
-        console.log('Failed to create players_table'); 
-    }
-})
 
 app.get('/', (req, res) => {
     res.send('You are at the right place')
@@ -83,14 +66,10 @@ app.get('/cycle_value', (req,res) => {
     })
 })
 
-// Updating the DB with the current BTC/USD rate
-// cycleValue.writeCycleValue();
-// cycleValue.resCalc();
-
 //////////////// END CYCLE VALUE ESECTION //////////////////
 
 app.get('/players', (req,res) => {
-    connection.query(`${SELECT_ALL_PLAYERS}${parseInt(new Date().getHours()-1)}`, (err, result) => {
+    connection.query(`${SELECT_ALL_PLAYERS}`, (err, result) => {
         if(err) {
             return res.send(err)
         } else {

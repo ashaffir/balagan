@@ -22,14 +22,15 @@ We = ((Ub x Tu) / SUM_W_BETS) x BET_PORTION x SUM_LOOSING_BETS
 
 const SELECT_CURRENT_CYCLE_VALUE = `select cycle_value from cycle_value_table where minutes=0 and hours=`;
 const SELECT_PREV_CYCLE_VALUE = `select cycle_value from cycle_value_table where minutes=0 and hours=`;
-const UP_PLAYERS_WON = `update players_table set result=1 where direction='up';`;
-const UP_PLAYERS_LOST = `update players_table set result=0 where direction='up';`;
-const DOWN_PLAYERS_WON = `update players_table set result=1 where direction='down';`;
-const DOWN_PLAYERS_LOST = `update players_table set result=0 where direction='down';`;
 const CALCULATE_WIN_LOSE_AMOUNT = `SELECT SUM(bet) as 'sum' FROM players_table WHERE direction=`;
 const CALCULATE_W_BETS_AMOUNT = `SELECT SUM(w_bet) as 'sum' FROM players_table WHERE direction=`;
-const DRAW_CYCLE = `update players_table set result=3 where hours=`;
 
+
+// const DRAW_CYCLE = `update players_table set result=3 where hours=`;
+// const UP_PLAYERS_WON = `update players_table set result=1 where direction='up';`;
+// const UP_PLAYERS_LOST = `update players_table set result=0 where direction='up';`;
+// const DOWN_PLAYERS_WON = `update players_table set result=1 where direction='down';`;
+// const DOWN_PLAYERS_LOST = `update players_table set result=0 where direction='down';`;
 // const COUNT_WINNERS= `SELECT COUNT(user_id) FROM players_table WHERE status=1;`;
 // const UPDATE_STATUS_LOST = `UPDATE players_table SET result=0 WHERE direction='down';`;
 // const UPDATE_RESULT_WON= `UPDATE players_table SET result=1 WHERE direction='up;'`;
@@ -94,7 +95,7 @@ const db = new Database(params);
 ///////////////////////////
 
 function resultsCalculation(){
-    console.log(`RESULTS CALCULATION AT: ${new Date().getHours()}:${new Date().getMinutes()}`);
+    console.log(`RESULTS CALCULATION AT: ${new Date().toLocaleString()}`);
     db.query(`${SELECT_PREV_CYCLE_VALUE}${parseInt(new Date().getHours())-1} limit 1;`)
         .then(prev_cycle => { // result from the SELECT_PREV_CYCLE_VALUE => getting the previous cycle_value
             prev_value = prev_cycle[0]['cycle_value'];
@@ -131,7 +132,7 @@ function resultsCalculation(){
         })
         .then(direction => { 
             up_down = direction;
-            console.log(`dir1 = ${up_down}`);
+            // console.log(`dir1 = ${up_down}`);
             // console.log(`***************************`)
             // console.log(`${CALCULATE_LOOSING_AMOUNT}'${up_down}';`)
             db.query(`${CALCULATE_WIN_LOSE_AMOUNT}'${up_down}';`) //Calculating the winning mount
@@ -141,24 +142,24 @@ function resultsCalculation(){
                 return up_down
             })
             .then(up_down => {
-                console.log(`dir2 = ${up_down}`);
+                // console.log(`dir2 = ${up_down}`);
                 db.query(`${CALCULATE_W_BETS_AMOUNT}'${up_down}';`) //Calculating the weighted bets amount
                 .then(w_bets => {
-                    console.log(`dir2.5 = ${up_down}`);
+                    // console.log(`dir2.5 = ${up_down}`);
                     weighted_bets = w_bets[0]['sum'];
                     console.log(`Winnings weighted bets amount is: ${weighted_bets}`); 
                     return up_down
                 })
                 .then(up_down => {
-                    console.log(`dir3 = ${up_down}`);
+                    // console.log(`dir3 = ${up_down}`);
                     db.query(`${CALCULATE_WIN_LOSE_AMOUNT}'${up_down === 'Down' ? 'Up':'Down'}';`) // Calculating the loosing amount
                     .then(loosings => {
                         loosing_bets = loosings[0]['sum'];
-                        console.log(up_down)
+                        // console.log(up_down)
                         return up_down
                     })
                     .then(up_down => {
-                        console.log(up_down)
+                        // console.log(up_down)
                         console.log(`***************************`);
                         let payout = `update players_table set payout=(bet / ${winning_bets})*${BET_PORTION}*${loosing_bets}+ 
                         (w_bet / ${weighted_bets})*${BET_PORTION}*${loosing_bets}+bet, result=1 
