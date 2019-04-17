@@ -18,7 +18,8 @@ body {
 }
 
 header.logo-section {
-  background: #3d1010;
+  /* background: #3d1010; */
+  background: #402cf0;
 }
 
 code {

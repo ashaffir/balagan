@@ -87,7 +87,6 @@ export default class Players extends Component {
 
         return (
             <table className="players">  
-            <h4>{new Date().getHours()}:00-{parseInt(new Date().getHours())-1}:00 Winners</h4>
                 <tbody>
                     <tr>  
                         <th>User ID</th>

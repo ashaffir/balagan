@@ -7,7 +7,8 @@ import Charts from 'fusioncharts/fusioncharts.charts';
 import Widgets from 'fusioncharts/fusioncharts.widgets';
 import ReactFC from 'react-fusioncharts';
 import FusionTheme from 'fusioncharts/themes/fusioncharts.theme.fusion';
-import './Body.css'
+import './Body.css';
+import Players from './Players';
 
 import Cookies from 'universal-cookie';
 
@@ -19,6 +20,11 @@ let nextHour = 0;
 
 
 ReactFC.fcRoot(FusionCharts, Charts, Widgets, FusionTheme);
+
+const playersStyle = {
+  padding: '20px',
+  maxWidth: '330%'
+}
 
 class Body extends React.Component{
     constructor(props){
@@ -183,7 +189,7 @@ class Body extends React.Component{
 
     render(){
         return (
-        <div className="row mt-5 mt-xs-4">
+        <div className="row graph mt-5 mt-xs-4">
           <div className="col-12">
                   <div className="card custom-card mb-5 mb-xs-4">
                     <div className="card-body">
@@ -250,6 +256,22 @@ class Body extends React.Component{
 
                     </section>
                  </div>          
+            </div>
+            <div >
+              <table> 
+                <tr>
+                  <td style={playersStyle}>
+                    {/* <h4>{new Date().getHours()}:00-{parseInt(new Date().getHours())-1}:00 Winners</h4> */}
+                    <h4>Latest Winners</h4>
+                    <Players />
+                  </td>
+                  <td style={playersStyle}> </td>
+                  <td style={playersStyle}>
+                    <h4>Your Bets at {new Date().getHours()}:00-{parseInt(new Date().getHours())-1}:00</h4>
+                    {/* <Players /> */}
+                  </td>
+                </tr>
+              </table>
             </div>
             <Form 
             onClose={this.showForm}

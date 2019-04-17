@@ -1,4 +1,8 @@
 .footer-section {
+    width: 100%;
+    height: auto;
+    border-top: 2rem;
     padding: 30px;
-    background: lightsalmon;
+    background: #402cf0;
+    color: white;
 }

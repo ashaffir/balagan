@@ -3,7 +3,8 @@ table.players {
     font-family: Helvetica, Arial, sans-serif;
     width: 100%; 
     border-collapse: 
-    collapse; border-spacing: 0; 
+    collapse; border-spacing: 0;
+    bottom: 20px;
 }
 
 td.players, th {  
