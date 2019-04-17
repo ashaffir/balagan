@@ -21,7 +21,7 @@ const CREATE_CYCLE_VALUE_TABLE = 'CREATE TABLE IF NOT EXISTS cycle_value_table (
 
 
 const SELECT_ALL_ENTRIES = 'SELECT * FROM betting_table';
-const SELECT_ALL_PLAYERS = 'SELECT * FROM players_table';
+const SELECT_ALL_PLAYERS = 'SELECT * FROM players_table where result=1 and bet_hour='; //Displaying only the winners
 const SELECT_CURRENT_CYCLE_VALUE = 'SELECT * FROM cycle_value_table WHERE minutes=0 AND hours=';
 
 const DB_PORT = 4000;
@@ -90,7 +90,7 @@ app.get('/cycle_value', (req,res) => {
 //////////////// END CYCLE VALUE ESECTION //////////////////
 
 app.get('/players', (req,res) => {
-    connection.query(SELECT_ALL_PLAYERS, (err, result) => {
+    connection.query(`${SELECT_ALL_PLAYERS}${parseInt(new Date().getHours()-1)}`, (err, result) => {
         if(err) {
             return res.send(err)
         } else {
@@ -114,14 +114,27 @@ app.get('/bets/add', (req, res) => {
 })
 
 app.get('/players_bets/add', (req, res) => {
-    const { uid, direction, cycle_value, bet, w_bet } = req.query;
-    const ADD_NEW_BET = `INSERT INTO players_table (user_id, direction, cycle_value, bet, w_bet) 
-                         VALUES ('${uid}','${direction}','${cycle_value}','${bet}', '${w_bet}')`;
+    const { uid, direction, cycle_value, bet, w_bet, bet_hour, bet_minutes } = req.query;
+    const ADD_NEW_BET = `INSERT INTO players_table (user_id, direction, cycle_value, bet, w_bet, bet_hour, bet_minutes) 
+                         VALUES ('${uid}','${direction}','${cycle_value}','${bet}', '${w_bet}', '${bet_hour}', '${bet_minutes}')`;
     connection.query(ADD_NEW_BET, err => {
         if(err){
             res.send(`Error adding a players bet. ${err}`) 
         } else {
             res.send(`Added a new players bet: ${uid} going ${direction} from ${cycle_value}.`)
+        }
+    })
+})
+
+app.get('/players_update', (req, res) => {
+    const {uid} = req.query;
+    const UPDATE_STATUS = `update players_table set status=1 where user_id='${uid}' and bet_hour=${parseInt(new Date().getHours())-1}`;
+    console.log(UPDATE_STATUS);
+    connection.query(UPDATE_STATUS, (err) => {
+        if(err) {
+            res.send(`Error updating the user status field!!`)
+        } else {
+            res.send(`updated status for user ${uid} at ${new Date().getHours()}:${new Date().getMinutes()} ${new Date().getDate()}`);
         }
     })
 })

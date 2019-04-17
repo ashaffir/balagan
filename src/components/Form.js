@@ -162,8 +162,10 @@ export default class Form extends React.Component {
         let bet = this.state.bet;
         let min = parseInt(new Date().getMinutes());
         let w_bet = (60 - min)*bet;
+        let bet_hour = parseInt(new Date().getHours());
+        let bet_minutes = parseInt(new Date().getMinutes());
 
-        let PLAYER_BET_ADD = `http://localhost:4000/players_bets/add?uid=${uid}&direction=${direction}&cycle_value=${cycle_value}&bet=${bet}&w_bet=${w_bet}`;
+        let PLAYER_BET_ADD = `http://localhost:4000/players_bets/add?uid=${uid}&direction=${direction}&cycle_value=${cycle_value}&bet=${bet}&w_bet=${w_bet}&bet_hour=${bet_hour}&bet_minutes=${bet_minutes}`;
         // console.log(PLAYER_BET_ADD);
         fetch(PLAYER_BET_ADD)
         // .then(this.getProducts)

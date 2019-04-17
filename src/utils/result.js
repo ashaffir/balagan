@@ -94,7 +94,7 @@ const db = new Database(params);
 ///////////////////////////
 
 function resultsCalculation(){
-    console.log(`RUNNING RESULTS...`)
+    console.log(`RESULTS CALCULATION AT: ${new Date().getHours()}:${new Date().getMinutes()}`);
     db.query(`${SELECT_PREV_CYCLE_VALUE}${parseInt(new Date().getHours())-1} limit 1;`)
         .then(prev_cycle => { // result from the SELECT_PREV_CYCLE_VALUE => getting the previous cycle_value
             prev_value = prev_cycle[0]['cycle_value'];
@@ -161,7 +161,8 @@ function resultsCalculation(){
                         console.log(up_down)
                         console.log(`***************************`);
                         let payout = `update players_table set payout=(bet / ${winning_bets})*${BET_PORTION}*${loosing_bets}+ 
-                        (w_bet / ${weighted_bets})*${BET_PORTION}*${loosing_bets} + bet where direction='${up_down}'`;
+                        (w_bet / ${weighted_bets})*${BET_PORTION}*${loosing_bets}+bet, result=1 
+                        where direction='${up_down}' and bet_hour=${parseInt(new Date().getHours())-1}`;
                         db.query(payout) // Calculating payout
                         console.log(`loosings= ${loosing_bets} winnings = ${winning_bets} w_bets = ${weighted_bets}`)
                         // return db.close()

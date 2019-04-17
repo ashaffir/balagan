@@ -172,7 +172,6 @@ class Body extends React.Component{
       }) 
     }
 
-
    async getCycleValue() {
         await fetch('http://localhost:4000/cycle_value')
         .then(response => response.json())
@@ -199,7 +198,7 @@ class Body extends React.Component{
                   </div>
             </div>
             <div>
-              <h4>Your free points balance is <b>{balanceCookie.get('balance')}</b></h4>
+              <h4>Your free points balance is <b>{parseInt(balanceCookie.get('balance'))}</b></h4>
             </div>
             <div className="row col-12 mb-5 buttons-area">
                  <div className="card-deck custom-card-deck">

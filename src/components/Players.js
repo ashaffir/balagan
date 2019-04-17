@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import './Players.css'
+import Cookies from 'universal-cookie';
+
+const balanceCookie = new Cookies();
 
 
 export default class Players extends Component {
@@ -16,27 +19,46 @@ export default class Players extends Component {
 
       }
 
-      getPlayers = () => {
+    getPlayers = () => {
         fetch('http://localhost:4000/players')
         .then(response => response.json())
         .then(response => {this.setState ({players_bets: response.players_bets})})
+        .then(() => {this.updateBalance()})
+        .then(()=> {this.updateStatusDB()}) // Update the DB status field for the users that were updated
         .catch((err) => {
           console.log(err)
         })
-      }
+    }
 
-
-    addPlayer = _ => {
-        const { player } = this.state;
-        fetch(`http://localhost:4000/players/add?
-            user_id=${player.user_id}&
-            direction=${player.direction}&
-            cycle_value=${player.cycle_value}&
-            bet_time=${player.bet_time}&
-            bet=${player.bet}
-            `)
-        .then(this.getPlayers)
-        .catch(err => console.log(err))
+    updateBalance = () => {     
+        let payout , new_balance;      
+        let current_balance = parseFloat(balanceCookie.get('balance'));
+        let uid = balanceCookie.get('user_id');
+        console.log(`Updating balance cookie...`);
+        console.log(`${this.state.players_bets[0]['user_id']}`);
+        console.log(`${this.state.players_bets[0]['status']}`);
+        console.log(`${this.state.players_bets.length}`);
+        console.log(`USER ID FROM COOKIE: ${balanceCookie.get('user_id')}`);
+        for(let i=0; i < this.state.players_bets.length;i++){
+            if((uid === this.state.players_bets[i]['user_id']) && (this.state.players_bets[i]['status'] !== 1))
+                {
+                    console.log(`current balance ${i} = ${current_balance}`)
+                    payout = parseFloat(this.state.players_bets[i]['payout']);
+                    console.log(`payout ${i} = ${payout}`)
+                    current_balance += payout;
+                    console.log(`NEW BALANCE: ${new_balance}`);
+                }
+            }
+            
+            balanceCookie.set('balance', current_balance, {path: '/'});        
+        }
+    
+    updateStatusDB = () => {
+        let uid = balanceCookie.get('user_id');
+        let PLAYER_STATUS_UPDATE = `http://localhost:4000/players_update?uid=${uid}`;
+        console.log(`Updating the status of the user ${balanceCookie.get('user_id')}`);
+        fetch(PLAYER_STATUS_UPDATE)
+        .catch(err => console.log(err));
     }
 
     keyGen = (uid) => {
@@ -47,14 +69,14 @@ export default class Players extends Component {
         this.getPlayers();
       }
 
-    renderUser = ({user_id, direction, cycle_value, bet, bet_time,payout}) => 
+    renderUser = ({user_id, direction, cycle_value, bet, bet_hour, bet_minutes,payout}) => 
         <tr key={user_id}> 
             <td className="players">{user_id}</td>
             <td className="players">{direction}</td>
             <td className="players">{cycle_value}</td>
             <td className="players">{bet}</td>
-            <td className="players">{bet_time}</td>
-            <td className="players">{payout}</td>
+            <td className="players">{bet_hour}:{bet_minutes}</td>
+            <td className="players">{parseInt(payout)}</td>
         </tr> 
     
     render () {
@@ -65,7 +87,7 @@ export default class Players extends Component {
 
         return (
             <table className="players">  
-            <h2>Winners Table</h2>
+            <h4>{new Date().getHours()}:00-{parseInt(new Date().getHours())-1}:00 Winners</h4>
                 <tbody>
                     <tr>  
                         <th>User ID</th>
