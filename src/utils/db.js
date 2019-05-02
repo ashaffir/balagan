@@ -3,7 +3,7 @@
 const mysql = require('mysql');
 
 // Creating the tables queries:
-const CREATE_PLAYERS_TABLE = 'CREATE TABLE IF NOT EXISTS players_table (idx INT AUTO_INCREMENT, user_id VARCHAR(35), direction VARCHAR(5), cycle_value FLOAT(8,4), time TIMESTAMP, bet_hour int, bet_minutes int, bet INT,w_bet INT,result INT, payout FLOAT(10,4), status BOOLEAN ,PRIMARY KEY (idx));';
+const CREATE_PLAYERS_TABLE = 'CREATE TABLE IF NOT EXISTS players_table (idx INT AUTO_INCREMENT, user_id VARCHAR(35), direction VARCHAR(5), cycle_value FLOAT(8,4), time timestamp default current_timestamp on update current_timestamp, bet_hour int, bet_minutes int, bet INT,w_bet INT,result INT, payout FLOAT(10,4), status BOOLEAN ,PRIMARY KEY (idx));';
 const CREATE_CYCLE_VALUE_TABLE = 'CREATE TABLE IF NOT EXISTS cycle_value_table (idx INT AUTO_INCREMENT, cycle_value FLOAT(10,4), hours int, minutes int, time TIMESTAMP, PRIMARY KEY (idx));';
 const CREATE_BETS_TABLE = 'CREATE TABLE IF NOT EXISTS betting_table (idx INT AUTO_INCREMENT, user_local_wallet VARCHAR(35), direction VARCHAR(5), cycle_value FLOAT(7,3), bet_time TIMESTAMP, bet FLOAT(5,4), user_wallet VARCHAR(35), result INT, payout FLOAT(5,4), status BOOLEAN ,PRIMARY KEY (idx));';
 
