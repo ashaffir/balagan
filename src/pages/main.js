@@ -5,8 +5,6 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "../../src/style.css";
 import '../index.css';
 import logo from '../img/swingabit_logo.png';
-import Gamers from '../components/Gamers';
-import Players from '../components/Players';
 import Footer from '../components/Footer';
 
 const logoStyle = {

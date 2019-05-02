@@ -80,7 +80,7 @@ setInterval(async() => {
     await db.updatePlayersStatus().catch((err) => { console.log(`failed to update DB status for old players ${err}`)});
 }, 1800000)
 
-module.exports = {
+module.exports = { 
     writeCycleValue
     // resCalc
 };

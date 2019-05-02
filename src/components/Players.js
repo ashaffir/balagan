@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './Players.css'
 import Cookies from 'universal-cookie';
+import uniqueid from 'uniqid';
 
 const balanceCookie = new Cookies();
 
@@ -22,7 +23,7 @@ export default class Players extends Component {
     getPlayers = () => {
         fetch('http://localhost:4000/players')
         .then(response => response.json())
-        .then(response => {console.log(`response-1: ${response}`);this.setState ({players_bets: response.players_bets})})
+        .then(response => {this.setState ({players_bets: response.players_bets})})
         .then(() => {this.updateBalance()})
         .then(()=> {this.updateStatusDB()}) // Update the DB status field for the users that were updated
         .catch((err) => {
@@ -61,17 +62,12 @@ export default class Players extends Component {
         .catch(err => console.log(err));
     }
 
-    keyGen = (uid) => {
-        let rand = toString(Math.floor(Math.random * 5));
-        return uid+'_'+rand
-    }
       componentDidMount () {
         this.getPlayers();
       }
 
     renderUser = ({user_id, direction, cycle_value, bet, bet_hour, bet_minutes,payout}) => 
-        // <tr key={this.keyGen(user_id)}> 
-        <tr> 
+        <tr key={uniqueid()}> 
             <td className="players">{user_id}</td>
             <td className="players">{direction}</td>
             <td className="players">{cycle_value}</td>
@@ -84,8 +80,6 @@ export default class Players extends Component {
     render () {
 
         const { players_bets } = this.state;
-        // console.log(players_bets)
-
 
         return (
             <table className="players">  

@@ -99,7 +99,7 @@ function resultsCalculation(){
     db.query(`${SELECT_PREV_CYCLE_VALUE}${parseInt(new Date().getHours())-1} limit 1;`)
         .then(prev_cycle => { // result from the SELECT_PREV_CYCLE_VALUE => getting the previous cycle_value
             prev_value = prev_cycle[0]['cycle_value'];
-        // console.log(`Prev_value=${prev_value}`);
+        console.log(`Prev_value=${prev_value}`); 
         // console.log(`${SELECT_CURRENT_CYCLE_VALUE}${parseInt(new Date().getHours())} limit 1;`)
             return db.query(`${SELECT_CURRENT_CYCLE_VALUE}${parseInt(new Date().getHours())} limit 1;`) // and executing the next thing which its results will be used in the "result" in the next "then"
         })

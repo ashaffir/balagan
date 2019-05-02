@@ -32,24 +32,6 @@ const formStyle = {
     position: 'relative'
 };
 
-const formElement = {
-    borderRadius: '5px',
-    padding: 5,
-    width: '150px',
-    boxSizing: 'border-box'
-
-};
-
-const inputField = {
-    width: '300px',
-    borderRadius: '5px'
-
-}
-const footerStyle = {
-    position: 'absolute',
-    bottom: 20
-};
-
 const upperClose = {
     position:'relative',
     top:0,
@@ -117,7 +99,17 @@ export default class Form extends React.Component {
 
     handleBet = (e) => {
         // e.preventDefault();
+        let uid = this.props.user_id;
+        let direction = this.props.direction;
+        let cycle_value = this.props.cycle_value;
+        let bet = this.state.bet;
+        let min = parseInt(new Date().getMinutes());
+        let w_bet = (60 - min)*bet;
+        let bet_hour = parseInt(new Date().getHours());
+        let bet_minutes = parseInt(new Date().getMinutes());
         current_balance = balanceCookie.get('balance');
+        let PLAYER_BET_ADD = `http://localhost:4000/players_bets/add?uid=${uid}&direction=${direction}&cycle_value=${cycle_value}&bet=${bet}&w_bet=${w_bet}&bet_hour=${bet_hour}&bet_minutes=${bet_minutes}`;
+
         if ((parseInt(current_balance) - this.state.bet) >= 0) {
             new_balance = (parseInt(current_balance) - this.state.bet)
             balanceCookie.set('balance', new_balance, {path: '/'});
@@ -125,6 +117,9 @@ export default class Form extends React.Component {
                 current_balance: new_balance
             });
 
+            fetch(PLAYER_BET_ADD)
+            .catch(err => console.log(err));
+    
         } else if(current_balance > 0) {
             alert(`Please enter a bet lower or equal ${current_balance}`)
         } else {
@@ -155,22 +150,24 @@ export default class Form extends React.Component {
         console.log(`bet_time: ${this.state.bet_time}`)
     }
 
-    updatePlayersTable() {
-        let uid = this.props.user_id;
-        let direction = this.props.direction;
-        let cycle_value = this.props.cycle_value;
-        let bet = this.state.bet;
-        let min = parseInt(new Date().getMinutes());
-        let w_bet = (60 - min)*bet;
-        let bet_hour = parseInt(new Date().getHours());
-        let bet_minutes = parseInt(new Date().getMinutes());
+    // updatePlayersTable() {
+    //     let uid = this.props.user_id;
+    //     let direction = this.props.direction;
+    //     let cycle_value = this.props.cycle_value;
+    //     let bet = this.state.bet;
+    //     let min = parseInt(new Date().getMinutes());
+    //     let w_bet = (60 - min)*bet;
+    //     let bet_hour = parseInt(new Date().getHours());
+    //     let bet_minutes = parseInt(new Date().getMinutes());
 
-        let PLAYER_BET_ADD = `http://localhost:4000/players_bets/add?uid=${uid}&direction=${direction}&cycle_value=${cycle_value}&bet=${bet}&w_bet=${w_bet}&bet_hour=${bet_hour}&bet_minutes=${bet_minutes}`;
-        // console.log(PLAYER_BET_ADD);
-        fetch(PLAYER_BET_ADD)
-        // .then(this.getProducts)
-        .catch(err => console.log(err));
-    }
+    //     let PLAYER_BET_ADD = `http://localhost:4000/players_bets/add?uid=${uid}&direction=${direction}&cycle_value=${cycle_value}&bet=${bet}&w_bet=${w_bet}&bet_hour=${bet_hour}&bet_minutes=${bet_minutes}`;
+    //     if(this.state.reject === 0){
+    //         fetch(PLAYER_BET_ADD)
+    //         .catch(err => console.log(err));
+    //     } else {
+    //         return 1
+    //     }
+    // }
     
     render() {
         if (!this.props.show){
@@ -201,9 +198,9 @@ export default class Form extends React.Component {
                             this.onClose(e);
                             this.handleBet(e);
                             this.setBetTime();
-                            this.updatePlayersTable();
+                            // this.updatePlayersTable();
                             }}>
-                            <input type="number" onChange={(e) => {this.enterAmount(e)}}/>
+                            <input type="number" autofocus="autofocus" onChange={(e) => {this.enterAmount(e)}}/>
                             <input type='submit' value='Bet'/>
                         </form>
                     </div>

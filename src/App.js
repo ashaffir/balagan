@@ -28,7 +28,6 @@ class App extends Component {
 
   componentDidMount(){
     currentBalance = balanceCookie.get('balance');
-    console.log(`checkBalance= ${currentBalance}`)
     uid = randomString();
 
     if (isNaN(currentBalance)){

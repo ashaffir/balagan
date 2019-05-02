@@ -15,9 +15,6 @@ import Cookies from 'universal-cookie';
 
 const balanceCookie = new Cookies();
 const uid_cookie = new Cookies();
-let now = new Date();
-let hour = 0;
-let nextHour = 0;
 
 
 ReactFC.fcRoot(FusionCharts, Charts, Widgets, FusionTheme);
@@ -85,7 +82,6 @@ class Body extends React.Component{
 
     startUpdatingData(){
         setInterval(() => {
-            now = new Date();
             fetch(this.BASE_URL + 'btc-usd')
             .then(res => res.json())
             .then(d => {
