@@ -54,6 +54,7 @@ app.get('/bets', (req,res) => {
 
 // Presenting the current cycle value
 app.get('/cycle_value', (req,res) => {
+    console.log('in time');
     let hour = parseInt(new Date().getHours());
     connection.query(`${SELECT_CURRENT_CYCLE_VALUE}${hour} limit 1`, (err, result) => {
         if(err) {

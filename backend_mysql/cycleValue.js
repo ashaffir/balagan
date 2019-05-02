@@ -4,10 +4,7 @@ const fetch = require("node-fetch");
 const result = require('../src/utils/result');
 const db = require('../src/utils/db');
 
-
 const TICKER_URL = 'https://cors.io/?https://api.cryptonator.com/api/ticker/';
-
-const CREATE_CYCLE_VALUE_TABLE = 'CREATE TABLE IF NOT EXISTS cycle_value_table (idx INT AUTO_INCREMENT, cycle_value FLOAT(8,3), hour INT, minutes INT, time TIMESTAMP, PRIMARY KEY (idx));';
 
 const connection = mysql.createConnection({
     host: 'localhost',
@@ -21,12 +18,6 @@ connection.connect(err => {
         console.log(err)
     } 
 });
-
-connection.query(CREATE_CYCLE_VALUE_TABLE, err => {
-    if(err){
-        console.log('Failed to create betting_table'); 
-    }
-})
 
 const writeCycleValue = () => {
       

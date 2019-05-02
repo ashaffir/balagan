@@ -34,19 +34,19 @@ export default class Players extends Component {
         let payout , new_balance;      
         let current_balance = parseFloat(balanceCookie.get('balance'));
         let uid = balanceCookie.get('user_id');
-        console.log(`Updating balance cookie...`);
-        console.log(`${this.state.players_bets[0]['user_id']}`);
-        console.log(`${this.state.players_bets[0]['status']}`);
-        console.log(`${this.state.players_bets.length}`);
-        console.log(`USER ID FROM COOKIE: ${balanceCookie.get('user_id')}`);
+        // console.log(`Updating balance cookie...`);
+        // console.log(`${this.state.players_bets[0]['user_id']}`);
+        // console.log(`${this.state.players_bets[0]['status']}`);
+        // console.log(`${this.state.players_bets.length}`);
+        // console.log(`USER ID FROM COOKIE: ${balanceCookie.get('user_id')}`);
         for(let i=0; i < this.state.players_bets.length;i++){
             if((uid === this.state.players_bets[i]['user_id']) && (this.state.players_bets[i]['status'] !== 1))
                 {
-                    console.log(`current balance ${i} = ${current_balance}`)
+                    // console.log(`current balance ${i} = ${current_balance}`)
                     payout = parseFloat(this.state.players_bets[i]['payout']);
-                    console.log(`payout ${i} = ${payout}`)
+                    // console.log(`payout ${i} = ${payout}`)
                     current_balance += payout;
-                    console.log(`NEW BALANCE: ${new_balance}`);
+                    // console.log(`NEW BALANCE: ${new_balance}`);
                 }
             }
             
@@ -56,7 +56,7 @@ export default class Players extends Component {
     updateStatusDB = () => {
         let uid = balanceCookie.get('user_id');
         let PLAYER_STATUS_UPDATE = `http://localhost:4000/players_update?uid=${uid}`;
-        console.log(`Updating the status of the user ${balanceCookie.get('user_id')}`);
+        // console.log(`Updating the status of the user ${balanceCookie.get('user_id')}`);
         fetch(PLAYER_STATUS_UPDATE)
         .catch(err => console.log(err));
     }
@@ -82,7 +82,7 @@ export default class Players extends Component {
     render () {
 
         const { players_bets } = this.state;
-        console.log(players_bets)
+        // console.log(players_bets)
 
 
         return (

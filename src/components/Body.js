@@ -79,7 +79,7 @@ class Body extends React.Component{
         this.getDataFor('btc-usd', 'btcusd');
         this.getDataFor('ltc-usd', 'ltcusd');
         this.getDataFor('eth-usd', 'ethusd');
-        this.getCycleValue();
+        // this.getCycleValue();
     }
 
     startUpdatingData(){
@@ -259,18 +259,20 @@ class Body extends React.Component{
             </div>
             <div >
               <table> 
-                <tr>
-                  <td style={playersStyle}>
-                    {/* <h4>{new Date().getHours()}:00-{parseInt(new Date().getHours())-1}:00 Winners</h4> */}
-                    <h4>Latest Winners</h4>
-                    <Players />
-                  </td>
-                  <td style={playersStyle}> </td>
-                  <td style={playersStyle}>
-                    <h4>Your Bets at {new Date().getHours()}:00-{parseInt(new Date().getHours())-1}:00</h4>
-                    {/* <Players /> */}
-                  </td>
-                </tr>
+                <tbody>
+                  <tr>
+                    <td style={playersStyle}>
+                      {/* <h4>{new Date().getHours()}:00-{parseInt(new Date().getHours())-1}:00 Winners</h4> */}
+                      <h4>Latest Winners</h4>
+                      <Players />
+                    </td>
+                    <td style={playersStyle}> </td>
+                    <td style={playersStyle}>
+                      <h4>Your Bets at {new Date().getHours()}:00-{parseInt(new Date().getHours())-1}:00</h4>
+                      {/* <Players /> */}
+                    </td>
+                  </tr>
+                </tbody>
               </table>
             </div>
             <Form 
