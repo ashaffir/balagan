@@ -22,7 +22,7 @@ export default class Players extends Component {
     getPlayers = () => {
         fetch('http://localhost:4000/players')
         .then(response => response.json())
-        .then(response => {this.setState ({players_bets: response.players_bets})})
+        .then(response => {console.log(`response-1: ${response}`);this.setState ({players_bets: response.players_bets})})
         .then(() => {this.updateBalance()})
         .then(()=> {this.updateStatusDB()}) // Update the DB status field for the users that were updated
         .catch((err) => {
@@ -31,7 +31,7 @@ export default class Players extends Component {
     }
 
     updateBalance = () => {     
-        let payout , new_balance;      
+        let payout;      
         let current_balance = parseFloat(balanceCookie.get('balance'));
         let uid = balanceCookie.get('user_id');
         // console.log(`Updating balance cookie...`);
@@ -62,15 +62,16 @@ export default class Players extends Component {
     }
 
     keyGen = (uid) => {
-        let key = uid + '_' + new Date().getTime();
-        return key
+        let rand = toString(Math.floor(Math.random * 5));
+        return uid+'_'+rand
     }
       componentDidMount () {
         this.getPlayers();
       }
 
     renderUser = ({user_id, direction, cycle_value, bet, bet_hour, bet_minutes,payout}) => 
-        <tr key={user_id}> 
+        // <tr key={this.keyGen(user_id)}> 
+        <tr> 
             <td className="players">{user_id}</td>
             <td className="players">{direction}</td>
             <td className="players">{cycle_value}</td>
@@ -78,7 +79,8 @@ export default class Players extends Component {
             <td className="players">{bet_hour}:{bet_minutes}</td>
             <td className="players">{parseInt(payout)}</td>
         </tr> 
-    
+
+
     render () {
 
         const { players_bets } = this.state;
@@ -102,4 +104,3 @@ export default class Players extends Component {
         )
     }
 }
-

@@ -16,8 +16,9 @@ const app = express();
 app.use(cors());
 
 const SELECT_ALL_ENTRIES = 'SELECT * FROM betting_table';
-const SELECT_ALL_PLAYERS = 'SELECT * FROM players_table where result=1 and time > date_sub(now(), interval 1 hour)'; //Displaying only the winners
+const SELECT_ALL_PLAYERS = 'SELECT * FROM players_table where result=1 and time > date_sub(now(), interval 5 hour)'; //Displaying only the winners
 const SELECT_CURRENT_CYCLE_VALUE = 'SELECT * FROM cycle_value_table WHERE minutes=0 AND hours=';
+const SELECT_PLAYER = 'select * from players_table where user_id=';
 
 const DB_PORT = 4000;
 
@@ -51,8 +52,6 @@ app.get('/bets', (req,res) => {
 })
 
 // Cycle Value Section
-
-// Presenting the current cycle value
 app.get('/cycle_value', (req,res) => {
     console.log('in time');
     let hour = parseInt(new Date().getHours());
@@ -66,9 +65,11 @@ app.get('/cycle_value', (req,res) => {
         }
     })
 })
-
 //////////////// END CYCLE VALUE ESECTION //////////////////
 
+// PLAYERS (not real money) SECTION
+
+// Display only the winning players
 app.get('/players', (req,res) => {
     connection.query(`${SELECT_ALL_PLAYERS}`, (err, result) => {
         if(err) {
@@ -81,18 +82,22 @@ app.get('/players', (req,res) => {
     })
 })
 
-app.get('/bets/add', (req, res) => {
-    const { ulw, direction, cycle_value } = req.query;
-    const ADD_NEW_BET = `INSERT INTO betting_table (user_local_wallet, direction, cycle_value) VALUES ('${ulw}','${direction}','${cycle_value}')`;
-    connection.query(ADD_NEW_BET, err => {
-        if(err){
-            res.send('Error adding a bet!')
+// Display player information (bets, time, won/lost, payout)
+app.get('/player_info', (req,res) => {
+    const {uid} = req.query;
+    connection.query(`${SELECT_PLAYER}'${uid}'`, (err, result) => {
+        if(err) {
+            return res.send(err)
         } else {
-            res.send(`Added a new bet: ${ulw} going ${direction} from ${cycle_value}.`)
+            console.log(`${SELECT_PLAYER}'${uid}'`);
+            return res.json({
+                player_info: result
+            })
         }
     })
 })
 
+// Add new bet
 app.get('/players_bets/add', (req, res) => {
     const { uid, direction, cycle_value, bet, w_bet, bet_hour, bet_minutes } = req.query;
     const ADD_NEW_BET = `INSERT INTO players_table (user_id, direction, cycle_value, bet, w_bet, bet_hour, bet_minutes) 
@@ -106,6 +111,7 @@ app.get('/players_bets/add', (req, res) => {
     })
 })
 
+// Update status
 app.get('/players_update', (req, res) => {
     const {uid} = req.query;
     const UPDATE_STATUS = `update players_table set status=1 where user_id='${uid}' and bet_hour=${parseInt(new Date().getHours())-1}`;
@@ -115,6 +121,20 @@ app.get('/players_update', (req, res) => {
             res.send(`Error updating the user status field!!`)
         } else {
             res.send(`updated status for user ${uid} at ${new Date().getHours()}:${new Date().getMinutes()} ${new Date().getDate()}`);
+        }
+    })
+})
+
+//////////////// END PLAYERS ESECTION //////////////////
+
+app.get('/bets/add', (req, res) => {
+    const { ulw, direction, cycle_value } = req.query;
+    const ADD_NEW_BET = `INSERT INTO betting_table (user_local_wallet, direction, cycle_value) VALUES ('${ulw}','${direction}','${cycle_value}')`;
+    connection.query(ADD_NEW_BET, err => {
+        if(err){
+            res.send('Error adding a bet!')
+        } else {
+            res.send(`Added a new bet: ${ulw} going ${direction} from ${cycle_value}.`)
         }
     })
 })

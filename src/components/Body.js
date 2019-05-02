@@ -9,6 +9,7 @@ import ReactFC from 'react-fusioncharts';
 import FusionTheme from 'fusioncharts/themes/fusioncharts.theme.fusion';
 import './Body.css';
 import Players from './Players';
+import Bets from './Bets';
 
 import Cookies from 'universal-cookie';
 
@@ -79,7 +80,7 @@ class Body extends React.Component{
         this.getDataFor('btc-usd', 'btcusd');
         this.getDataFor('ltc-usd', 'ltcusd');
         this.getDataFor('eth-usd', 'ethusd');
-        // this.getCycleValue();
+        this.getCycleValue();
     }
 
     startUpdatingData(){
@@ -268,8 +269,8 @@ class Body extends React.Component{
                     </td>
                     <td style={playersStyle}> </td>
                     <td style={playersStyle}>
-                      <h4>Your Bets at {new Date().getHours()}:00-{parseInt(new Date().getHours())-1}:00</h4>
-                      {/* <Players /> */}
+                      <h4>Your Active Bets at {new Date().getHours()}:00-{parseInt(new Date().getHours())-1}:00</h4>
+                      <Bets />
                     </td>
                   </tr>
                 </tbody>
