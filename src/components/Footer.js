@@ -6,7 +6,7 @@ export default class Footer extends React.Component{
         return (
             <>
                 <section className='footer-section'>
-                    <p>This is the footer.</p>
+                    <p>SwingAbit is the Sh...t</p>
                 </section>
             </>
         )
