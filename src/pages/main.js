@@ -30,7 +30,7 @@ export default class Main extends Component {
     return (
         <div style={appStyle} className="App">
           <header className="App-header logo-section" align='center'>
-            <img style={logoStyle} src={logo} alt="Swing@bit logo" />
+            <a href="/"><img style={logoStyle} src={logo} alt="Swing@bit logo" /></a>
           </header>
           {/* Start Chart Section */}
           {/* <Chart /> */}

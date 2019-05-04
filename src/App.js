@@ -51,8 +51,8 @@ class App extends Component {
         <React.Fragment>
         {/* <MainNavigation /> */}
         <Switch>
-          <Redirect from='/' to='/main' exact  />
-          <Route path='/main' component={Main} />
+          {/* <Redirect from='/' to='/main' exact  /> */}
+          <Route path='/' component={Main} />
           <Route path='/faq' component={FaqPage} />
         </Switch> 
           </React.Fragment>
