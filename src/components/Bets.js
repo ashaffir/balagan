@@ -40,7 +40,6 @@ export default class Bets extends Component {
             <td className="players">{cycle_value}</td>
             <td className="players">{bet}</td>
             <td className="players">{bet_hour}:{bet_minutes}</td>
-            <td className="players">{parseInt(payout)}</td>
         </tr> 
     
     render () {
@@ -56,7 +55,6 @@ export default class Bets extends Component {
                         <th>Cycle Value</th>
                         <th>Bet Amount</th>
                         <th>Bet Time</th>
-                        <th>Payout</th>
                     </tr>  
                     {player_info.map(this.renderUserBets)}
                 </tbody>

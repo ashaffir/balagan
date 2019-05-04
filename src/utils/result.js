@@ -20,7 +20,7 @@ Ue = (Ub / SUM_WINNING_BETS) x BET_PORTION x SUM_LOOSING_BETS
 We = ((Ub x Tu) / SUM_W_BETS) x BET_PORTION x SUM_LOOSING_BETS
 */
 
-const SELECT_CURRENT_CYCLE_VALUE = `select cycle_value from cycle_value_table where minutes=0 and hours=`;
+const SELECT_CURRENT_CYCLE_VALUE = `select cycle_value from cycle_value_table where minutes=53 and hours=`;
 const SELECT_PREV_CYCLE_VALUE = `select cycle_value from cycle_value_table where minutes=0 and hours=`;
 const CALCULATE_WIN_LOSE_AMOUNT = `SELECT SUM(bet) as 'sum' FROM players_table WHERE direction=`;
 const CALCULATE_W_BETS_AMOUNT = `SELECT SUM(w_bet) as 'sum' FROM players_table WHERE direction=`;
@@ -96,16 +96,17 @@ const db = new Database(params);
 
 function resultsCalculation(){
     console.log(`RESULTS CALCULATION AT: ${new Date().toLocaleString()}`);
+    // console.log(`Running: ${SELECT_PREV_CYCLE_VALUE}${parseInt(new Date().getHours())-1} limit 1;`);
     db.query(`${SELECT_PREV_CYCLE_VALUE}${parseInt(new Date().getHours())-1} limit 1;`)
         .then(prev_cycle => { // result from the SELECT_PREV_CYCLE_VALUE => getting the previous cycle_value
             prev_value = prev_cycle[0]['cycle_value'];
-        console.log(`Prev_value=${prev_value}`); 
-        // console.log(`${SELECT_CURRENT_CYCLE_VALUE}${parseInt(new Date().getHours())} limit 1;`)
+            // console.log(`Prev_value=${prev_value}`); 
+        console.log(`Retunring: ${SELECT_CURRENT_CYCLE_VALUE}${parseInt(new Date().getHours())} limit 1;`)
             return db.query(`${SELECT_CURRENT_CYCLE_VALUE}${parseInt(new Date().getHours())} limit 1;`) // and executing the next thing which its results will be used in the "result" in the next "then"
         })
         .then(curr_cycle => { // The results from the SELECT_CURRENT_CYCLE_VALUE => the current cycle_value
             curr_value = curr_cycle[0]['cycle_value'];
-            // console.log(`Curr_value=${curr_value}`);
+            console.log(`Curr_value=${curr_value}`);
             return {            // Sending the results required for the next operation
                 prev_value: prev_value,
                 curr_value: curr_value

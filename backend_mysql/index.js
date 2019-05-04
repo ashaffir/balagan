@@ -18,7 +18,7 @@ app.use(cors());
 const SELECT_ALL_ENTRIES = 'SELECT * FROM betting_table';
 const SELECT_ALL_PLAYERS = 'SELECT * FROM players_table where result=1 and time > date_sub(now(), interval 5 hour)'; //Displaying only the winners
 const SELECT_CURRENT_CYCLE_VALUE = 'SELECT * FROM cycle_value_table WHERE minutes=0 AND hours=';
-const SELECT_PLAYER = 'select * from players_table where user_id=';
+const SELECT_PLAYER = 'select * from players_table where time > date_sub(now(), interval 1 hour) and user_id=';
 
 const DB_PORT = 4000;
 
@@ -51,7 +51,8 @@ app.get('/bets', (req,res) => {
     })
 })
 
-// Cycle Value Section
+//////////////// CYCLE VALUE ESECTION //////////////////
+
 app.get('/cycle_value', (req,res) => {
     console.log('in time');
     let hour = parseInt(new Date().getHours());
@@ -67,7 +68,7 @@ app.get('/cycle_value', (req,res) => {
 })
 //////////////// END CYCLE VALUE ESECTION //////////////////
 
-// PLAYERS (not real money) SECTION
+//////////////// PLAYERS (not real money) SECTION //////////
 
 // Display only the winning players
 app.get('/players', (req,res) => {
@@ -97,7 +98,7 @@ app.get('/player_info', (req,res) => {
     })
 })
 
-// Add new bet
+// Add new player's bet
 app.get('/players_bets/add', (req, res) => {
     const { uid, direction, cycle_value, bet, w_bet, bet_hour, bet_minutes } = req.query;
     const ADD_NEW_BET = `INSERT INTO players_table (user_id, direction, cycle_value, bet, w_bet, bet_hour, bet_minutes) 
@@ -111,7 +112,7 @@ app.get('/players_bets/add', (req, res) => {
     })
 })
 
-// Update status
+// Update player status
 app.get('/players_update', (req, res) => {
     const {uid} = req.query;
     const UPDATE_STATUS = `update players_table set status=1 where user_id='${uid}' and bet_hour=${parseInt(new Date().getHours())-1}`;
@@ -125,7 +126,7 @@ app.get('/players_update', (req, res) => {
     })
 })
 
-//////////////// END PLAYERS ESECTION //////////////////
+//////////////// END PLAYERS SECTION //////////////////
 
 app.get('/bets/add', (req, res) => {
     const { ulw, direction, cycle_value } = req.query;

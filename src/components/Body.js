@@ -183,7 +183,7 @@ class Body extends React.Component{
           console.log(err)
         })
     }
-
+    
     render(){
         return (
         <div className="row graph mt-5 mt-xs-4">
@@ -265,7 +265,7 @@ class Body extends React.Component{
                     </td>
                     <td style={playersStyle}> </td>
                     <td style={playersStyle}>
-                      <h4>Your Active Bets at {new Date().getHours()}:00-{parseInt(new Date().getHours())-1}:00</h4>
+                      <h4>Your Active Bets Between {new Date().getHours()}:00-{parseInt(new Date().getHours())-1}:00</h4>
                       <Bets />
                     </td>
                   </tr>

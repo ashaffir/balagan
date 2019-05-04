@@ -66,18 +66,22 @@ async function resCalc(){
     await result.resultsCalculation(); 
 }
 
+async function cycleCleanup(){
+    await db.cleanCycleValue();
+}
+
 setInterval(async () => {
         await resCalc().catch((err) => {console.log(`failed at resCalc ${err}`)});
 }, 300000);
 
 setInterval(async () => {
     console.log(`Cleaning the Cycle value DB at ${new Date().toLocaleString()}`)
-    await db.cleanCyclevalue().catch((err) => {console.log(`failed at cleaning DB ${err}`)});
+    await cycleCleanup().catch((err) => {console.log(`failed at cleaning DB ${err}`)});
 }, 3600000);
 
 setInterval(async() => {
-    console.log(`Updating DB status for old players at ${new Date().toLocaleString()}`)
-    await db.updatePlayersStatus().catch((err) => { console.log(`failed to update DB status for old players ${err}`)});
+    console.log(`Updating DB status for old players at ${new Date().toLocaleString()}`);
+    await db.updatePlayersStatus().catch((err) => {console.log(`failed to update DB status for old players ${err}`)});
 }, 1800000)
 
 module.exports = { 

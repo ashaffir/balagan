@@ -58,6 +58,9 @@ export default class Form extends React.Component {
 
     onClose = (e) => {
         this.props.onClose && this.props.onClose(e);
+        
+        // Refreshing the page for the player info table to update
+        window.location.reload();
     }
 
 
@@ -98,7 +101,7 @@ export default class Form extends React.Component {
     }
 
     handleBet = (e) => {
-        // e.preventDefault();
+        e.preventDefault();
         let uid = this.props.user_id;
         let direction = this.props.direction;
         let cycle_value = this.props.cycle_value;
@@ -117,6 +120,7 @@ export default class Form extends React.Component {
                 current_balance: new_balance
             });
 
+            //Writing  the bet into the DB
             fetch(PLAYER_BET_ADD)
             .catch(err => console.log(err));
     
@@ -150,24 +154,6 @@ export default class Form extends React.Component {
         console.log(`bet_time: ${this.state.bet_time}`)
     }
 
-    // updatePlayersTable() {
-    //     let uid = this.props.user_id;
-    //     let direction = this.props.direction;
-    //     let cycle_value = this.props.cycle_value;
-    //     let bet = this.state.bet;
-    //     let min = parseInt(new Date().getMinutes());
-    //     let w_bet = (60 - min)*bet;
-    //     let bet_hour = parseInt(new Date().getHours());
-    //     let bet_minutes = parseInt(new Date().getMinutes());
-
-    //     let PLAYER_BET_ADD = `http://localhost:4000/players_bets/add?uid=${uid}&direction=${direction}&cycle_value=${cycle_value}&bet=${bet}&w_bet=${w_bet}&bet_hour=${bet_hour}&bet_minutes=${bet_minutes}`;
-    //     if(this.state.reject === 0){
-    //         fetch(PLAYER_BET_ADD)
-    //         .catch(err => console.log(err));
-    //     } else {
-    //         return 1
-    //     }
-    // }
     
     render() {
         if (!this.props.show){
