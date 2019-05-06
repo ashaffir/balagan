@@ -12,12 +12,14 @@ const CREATE_BETS_TABLE = 'CREATE TABLE IF NOT EXISTS betting_table (idx INT AUT
 const CLEAN_DB_CYCLE_VALUE = `delete from cycle_value_table where time < date_sub(now(), interval 3 hour);`;
 const CLEAN_DB_UPDATE_OLD_PLAYERS_STATUS = `update players_table set status=0 where status is NULL and time < date_sub(now(), interval 1 hour);`
 
+const DB_PASS = '1q@W#E$R5t';
+
 class Database {
     constructor() {
         this.connection = mysql.createConnection( {
             host: 'localhost',
             user: 'root',
-            password: '1q@W#E$R5t',
+            password: DB_PASS,
             database: 'swingabit'
         } );
     }
@@ -56,7 +58,7 @@ class Database {
 const Connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: '1q@W#E$R5t',
+    password: DB_PASS,
     database: 'swingabit'
 });
 

@@ -16,6 +16,7 @@ import Cookies from 'universal-cookie';
 const balanceCookie = new Cookies();
 const uid_cookie = new Cookies();
 
+const DB_PORT = 4000;
 
 ReactFC.fcRoot(FusionCharts, Charts, Widgets, FusionTheme);
 
@@ -176,7 +177,7 @@ class Body extends React.Component{
     }
 
    async getCycleValue() {
-        await fetch('http://localhost:4000/cycle_value')
+        await fetch(`http://localhost:${DB_PORT}/cycle_value`)
         .then(response => response.json())
         .then(response => {this.setState ({cycle_value: response['cycle_value'][0]['cycle_value']})})
         .catch((err) => {

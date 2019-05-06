@@ -11,6 +11,7 @@ import Cookies from 'universal-cookie';
 // import connection from '../utils/db';
 
 const userIdCookie = new Cookies();
+const DB_PORT = 4000;
 
 const backdropStyle = {
     position: 'fixed',
@@ -111,7 +112,7 @@ export default class Form extends React.Component {
         let bet_hour = parseInt(new Date().getHours());
         let bet_minutes = parseInt(new Date().getMinutes());
         current_balance = balanceCookie.get('balance');
-        let PLAYER_BET_ADD = `http://localhost:4000/players_bets/add?uid=${uid}&direction=${direction}&cycle_value=${cycle_value}&bet=${bet}&w_bet=${w_bet}&bet_hour=${bet_hour}&bet_minutes=${bet_minutes}`;
+        let PLAYER_BET_ADD = `http://localhost:${DB_PORT}/players_bets/add?uid=${uid}&direction=${direction}&cycle_value=${cycle_value}&bet=${bet}&w_bet=${w_bet}&bet_hour=${bet_hour}&bet_minutes=${bet_minutes}`;
 
         if ((parseInt(current_balance) - this.state.bet) >= 0) {
             new_balance = (parseInt(current_balance) - this.state.bet)

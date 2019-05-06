@@ -6,10 +6,12 @@ const db = require('../src/utils/db');
 
 const TICKER_URL = 'https://cors.io/?https://api.cryptonator.com/api/ticker/';
 
+const DB_PASS = '1q@W#E$R5t';
+
 const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: '1q@W#E$R5t',
+    password: DB_PASS,
     database: 'swingabit'
 });
 

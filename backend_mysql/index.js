@@ -13,6 +13,8 @@ const mysql = require('mysql');
 
 const app = express();
 
+const DB_PASS = '1q@W#E$R5t';
+
 app.use(cors());
 
 const SELECT_ALL_ENTRIES = 'SELECT * FROM betting_table';
@@ -25,7 +27,7 @@ const DB_PORT = 4000;
 const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: '1q@W#E$R5t',
+    password: DB_PASS,
     database: 'swingabit'
 });
 
@@ -34,10 +36,6 @@ connection.connect(err => {
         console.log(err)
     } 
 });
-
-app.get('/', (req, res) => {
-    res.send('You are at the right place')
-})
 
 app.get('/bets', (req,res) => {
     connection.query(SELECT_ALL_ENTRIES, (err, result) => {

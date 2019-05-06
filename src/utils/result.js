@@ -41,7 +41,7 @@ const CALCULATE_W_BETS_AMOUNT = `SELECT SUM(w_bet) as 'sum' FROM players_table W
 
 const COMMISSION = 0.004;
 const BET_PORTION = (1 - COMMISSION) / 2;
-
+const DB_PASS = '1q@W#E$R5t';
 
 let loosing_bets, winning_bets, weighted_bets, up_down;
 
@@ -49,7 +49,7 @@ let curr_value, prev_value;
 const params = {
     host: 'localhost',
     user: 'root',
-    password: '1q@W#E$R5t',
+    password: DB_PASS,
     database: 'swingabit'
 };
 
