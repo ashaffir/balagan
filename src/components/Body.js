@@ -189,25 +189,17 @@ class Body extends React.Component{
     render(){
         return (
         <div >
-
-          <div className="col-12 chart">
-                  <div className="card custom-card mb-5 mb-xs-4">
-                    <div className="card-body">
-                              {
-                              this.state.showChart ? 
-                              <ReactFC 
-                              {...this.chartConfigs}
-                              dataSource={this.state.dataSource} 
-                              onRender={this.getChartRef.bind(this)}/>: null
-                          }
-                    </div>
-                  </div>
-            </div>
-            <div className='current-cycle' style={{
-                      borderWidth: '3px',
-                      borderColor: 'red'
-                      }}>
+          <div className='current-cycle'>
                 <Timing cycle_value={this.state.cycle_value}/>
+          </div>
+          <div className="chart">
+                    {
+                    this.state.showChart ? 
+                    <ReactFC 
+                    {...this.chartConfigs}
+                    dataSource={this.state.dataSource} 
+                    onRender={this.getChartRef.bind(this)}/>: null
+                }
             </div>
             <div>
               <div>

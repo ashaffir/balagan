@@ -126,3 +126,8 @@
 .main-body {
   width: 100%;
 }
+
+.current-cycle {
+  color: black;
+  padding-top: 20px;
+}

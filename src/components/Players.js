@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import './Players.css'
 import Cookies from 'universal-cookie';
 import uniqueid from 'uniqid';
+
+import './Players.css'
 
 const balanceCookie = new Cookies();
 
@@ -74,7 +75,6 @@ export default class Players extends Component {
             <td className="players">{direction}</td>
             <td className="players">{cycle_value}</td>
             <td className="players">{bet}</td>
-            <td className="players">{bet_hour}:{bet_minutes}</td>
             <td className="players">{parseInt(payout)}</td>
         </tr> 
 
@@ -91,7 +91,6 @@ export default class Players extends Component {
                         <th>Direction</th>
                         <th>Cycle Value</th>
                         <th>Bet Amount</th>
-                        <th>Bet Time</th>
                         <th>Payout</th>
                     </tr>  
                     {players_bets.map(this.renderUser)}
