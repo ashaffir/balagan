@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
-import "bootstrap/dist/css/bootstrap.min.css";
-import "../src/style.css";
-import {BrowserRouter, Route, Redirect, Switch } from 'react-router-dom';
+import {BrowserRouter, Route, Switch } from 'react-router-dom';
 import FaqPage from './pages/faq'
-import './index.css'
+import './css/bootstrap.min.css'
 import Main from './pages/main';
 import Cookies from 'universal-cookie';
 

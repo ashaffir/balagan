@@ -4,8 +4,8 @@ import Cookies from 'universal-cookie';
 import uniqueid from 'uniqid';
 
 const userCookie = new Cookies();
-const DB_PORT = 4000;
 
+const dev_db_route = 'http://localhost:3001';
 
 export default class Bets extends Component {
     state = {
@@ -21,7 +21,7 @@ export default class Bets extends Component {
       }
 
     getPlayerInfo = (uid) => {
-        fetch(`http://localhost:${DB_PORT}/player_info?uid=${uid}`)
+        fetch(`${dev_db_route}/db/player_info?uid=${uid}`)
         .then(response => response.json())
         .then(response => {this.setState ({player_info: response.player_info})})
         .catch((err) => {

@@ -7,22 +7,22 @@ import Charts from 'fusioncharts/fusioncharts.charts';
 import Widgets from 'fusioncharts/fusioncharts.widgets';
 import ReactFC from 'react-fusioncharts';
 import FusionTheme from 'fusioncharts/themes/fusioncharts.theme.fusion';
-import './Body.css';
 import Players from './Players';
 import Bets from './Bets';
 
 import Cookies from 'universal-cookie';
+import './Body.css';
 
 const balanceCookie = new Cookies();
 const uid_cookie = new Cookies();
 
-const DB_PORT = 4000;
+const dev_db_route = 'http://localhost:3001';
 
 ReactFC.fcRoot(FusionCharts, Charts, Widgets, FusionTheme);
 
 const playersStyle = {
   padding: '20px',
-  maxWidth: '330%'
+  maxWidth: '40%'
 }
 
 class Body extends React.Component{
@@ -63,7 +63,9 @@ class Body extends React.Component{
                 }]
             },
           cycle_value: 0,
-          user_id: ''
+          user_id: '',
+          direction:'',
+          balance: 0
         };
         this.chartConfigs = {
             type: 'realtimeline',
@@ -101,7 +103,10 @@ class Body extends React.Component{
 
     getDataFor(conversion, prop){
         fetch(this.BASE_URL + conversion, {
-            mode: 'cors'
+            mode: 'cors',
+            headers: {
+              'Access-Control-Allow-Origin':'*'
+            }
         })
         .then(res => res.json())
         .then(d => {
@@ -177,7 +182,7 @@ class Body extends React.Component{
     }
 
    async getCycleValue() {
-        await fetch(`http://localhost:${DB_PORT}/cycle_value`)
+        await fetch(`${dev_db_route}/db/cycle_value`)
         .then(response => response.json())
         .then(response => {this.setState ({cycle_value: response['cycle_value'][0]['cycle_value']})})
         .catch((err) => {
@@ -187,8 +192,9 @@ class Body extends React.Component{
     
     render(){
         return (
-        <div className="row graph mt-5 mt-xs-4">
-          <div className="col-12">
+        <div >
+
+          <div className="col-12 chart">
                   <div className="card custom-card mb-5 mb-xs-4">
                     <div className="card-body">
                               {
@@ -201,77 +207,57 @@ class Body extends React.Component{
                     </div>
                   </div>
             </div>
-            <div>
-              <h4>Your free points balance is <b>{parseInt(balanceCookie.get('balance'))}</b></h4>
+            <div className='current-cycle' style={{
+                      borderWidth: '3px',
+                      borderColor: 'red'
+                      }}>
+                <Timing cycle_value={this.state.cycle_value}/>
             </div>
-            <div className="row col-12 mb-5 buttons-area">
-                 <div className="card-deck custom-card-deck">
-                    
-                    {/* <PriceCard header="Bitcoin(LTC)"   src={'/bitcoin.png'} alt="fireSpot" label="(Price in USD)"  value={this.state.btcusd}/> */}
-                    {/* <PriceCard header="Litecoin(LTC)"   src={'/litecoin.png'} alt="fireSpot" label="(Price in USD)"  value={this.state.ltcusd}/>
-                    <PriceCard header="Ethereum(ETH)" src={'/ethereum.png'} alt="fireSpot" label="(Price in USD)"    value={this.state.ethusd}/> */}
-                    
-                    <section className="buttons-section">
-                      <table >
-                        <tbody >
-                          <tr className="buttons-row">
-                            <td>
-                              <div>
-                                <button className="push_button blue" onClick={
-                                  (e) => {
-                                    this.showForm();
-                                    this.setDirection('Up')
-                                    this.getCycleValue();
-                                    this.getUserId();
-                                    }}>Will be Higher</button>
-                              </div>
-                            </td>
-                            <td>
-                            <PriceCard 
+            <div>
+              <div>
+                  <button className="push_button blue" 
+                  onClick={
+                    (e) => {
+                      this.showForm();
+                      this.setDirection('HIGHER')
+                      this.getCycleValue();
+                      this.getUserId();
+                      }}>Will be Higher</button>
+                </div>
+                <div style={{
+                  width: '150px',
+                  marginLeft: 'auto',
+                  marginRight: 'auto'
+                }}>
+                <PriceCard 
                               header="Bitcoin" 
                               src={'/bitcoin.png'} 
                               alt="fireSpot" 
                               label="(Price in USD)"   
                               value={this.state.btcusd} 
-                            />
-                            </td>
-                            <td>
-                              <div>
-                                <button type="button" className="push_button red" onClick={
-                                  (e) => {
-                                    this.showForm();
-                                    this.setDirection('Down');
-                                    this.getCycleValue();
-                                    this.getUserId();
-                                    }}>Will be Lower</button>
-                              </div>
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-                      
-                      <Timing cycle_value={this.state.cycle_value}/>
-
-                    </section>
-                 </div>          
+                            />          
+                </div> 
+                <div>
+                  <button type="button" className="push_button red"
+                  onClick={
+                    (e) => {
+                      this.showForm();
+                      this.setDirection('LOWER');
+                      this.getCycleValue();
+                      this.getUserId();
+                      }}>Will be Lower</button>
+                </div>
             </div>
-            <div >
-              <table> 
-                <tbody>
-                  <tr>
-                    <td style={playersStyle}>
-                      {/* <h4>{new Date().getHours()}:00-{parseInt(new Date().getHours())-1}:00 Winners</h4> */}
-                      <h4>Latest Winners</h4>
-                      <Players />
-                    </td>
-                    <td style={playersStyle}> </td>
-                    <td style={playersStyle}>
-                      <h4>Your Active Bets Between {new Date().getHours()}:00-{parseInt(new Date().getHours())-1}:00</h4>
-                      <Bets />
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+            <div>
+              <div className='table-section'>
+                {/* <h4>{new Date().getHours()}:00-{parseInt(new Date().getHours())-1}:00 Winners</h4> */}
+                <h4>Your bets between {new Date().getHours()}:00-{parseInt(new Date().getHours())-1}:00</h4>
+                <Bets />
+              </div>
+              <div className='table-section' >
+                <h4>Latest Winners</h4>
+                <Players />
+              </div>
             </div>
             <Form 
             onClose={this.showForm}
@@ -279,6 +265,7 @@ class Body extends React.Component{
             direction={this.state.direction}
             cycle_value={this.state.cycle_value}
             user_id={this.state.user_id}
+            balance={parseInt(balanceCookie.get('balance'))}
             />
 		</div>
         )

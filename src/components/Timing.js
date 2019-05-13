@@ -14,7 +14,8 @@ export default class Timing extends Component {
     render() {
         return (
             <div>
-                <h4>There are {this.getMinutesUntilNextHour()} minutes remain for this cycle rate: {this.props.cycle_value}.</h4>
+                <h4> At {new Date().getHours()}:00 the rate was <b>{this.props.cycle_value}</b>.
+                You have {this.getMinutesUntilNextHour()} minutes to make your bet.</h4>
             </div>
             );
         }

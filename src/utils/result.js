@@ -20,7 +20,7 @@ Ue = (Ub / SUM_WINNING_BETS) x BET_PORTION x SUM_LOOSING_BETS
 We = ((Ub x Tu) / SUM_W_BETS) x BET_PORTION x SUM_LOOSING_BETS
 */
 
-const SELECT_CURRENT_CYCLE_VALUE = `select cycle_value from cycle_value_table where minutes=53 and hours=`;
+const SELECT_CURRENT_CYCLE_VALUE = `select cycle_value from cycle_value_table where minutes=0 and hours=`;
 const SELECT_PREV_CYCLE_VALUE = `select cycle_value from cycle_value_table where minutes=0 and hours=`;
 const CALCULATE_WIN_LOSE_AMOUNT = `SELECT SUM(bet) as 'sum' FROM players_table WHERE direction=`;
 const CALCULATE_W_BETS_AMOUNT = `SELECT SUM(w_bet) as 'sum' FROM players_table WHERE direction=`;

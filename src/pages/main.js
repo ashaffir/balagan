@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
-// import Chart from './chart.js';
+
+//Components
 import Body from "../components/Body";
-import "bootstrap/dist/css/bootstrap.min.css";
-import "../../src/style.css";
-import '../index.css';
-import logo from '../img/swingabit_logo.png';
 import Footer from '../components/Footer';
+
+// Design
+import "bootstrap/dist/css/bootstrap.min.css";
+import "../css/style.css";
+import logo from '../img/swingabit_logo-1.png';
 
 const logoStyle = {
     maxWidth: '30%',
@@ -28,10 +30,10 @@ export default class Main extends Component {
   render() {
     
     return (
-        <div style={appStyle} className="App">
-          <header className="App-header logo-section" align='center'>
+        <div style={appStyle} >
+          <div className="logo-section">
             <a href="/"><img style={logoStyle} src={logo} alt="Swing@bit logo" /></a>
-          </header>
+          </div>
           {/* Start Chart Section */}
           {/* <Chart /> */}
           {/* <style type="text/css">

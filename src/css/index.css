@@ -1,0 +1,46 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  align-content: center;
+  background-color: lightgreen;
+}
+
+@media only screen and (max-width: 900px) {
+  body {
+    background-color: lightblue;
+  }
+}
+
+header.logo-section {
+  /* background: #3d1010; */
+  background: #402cf0;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+section{
+  text-align: center;
+}
+
+.current_value{
+  background: gray;
+  vertical-align: top;
+}
+
+#current_value{
+  background: #AD4257;
+}
+
+/* canvas {
+  background: lightgray;
+  width: 70%;
+} */

@@ -8,10 +8,10 @@ import PropTypes from 'prop-types';
 import QRCode from 'qrcode.react'; //https://www.npmjs.com/package/qrcode.react;
 import './Form.css';
 import Cookies from 'universal-cookie';
-// import connection from '../utils/db';
 
 const userIdCookie = new Cookies();
-const DB_PORT = 4000;
+
+const dev_db_route = 'http://localhost:3001';
 
 const backdropStyle = {
     position: 'fixed',
@@ -54,7 +54,8 @@ export default class Form extends React.Component {
         user_local_wallet: 'USER_LOCAL_WALLET',
         current_balance: 0,
         user_id: 'nana',
-        bet: 0
+        bet: 0,
+        balance: 0
     };
 
     onClose = (e) => {
@@ -89,7 +90,6 @@ export default class Form extends React.Component {
             nextHour = '00:00';
         }
         this.setState({
-            // current_cycle: this.props.current_cycle,
             nextHour: nextHour
 
         });
@@ -112,7 +112,7 @@ export default class Form extends React.Component {
         let bet_hour = parseInt(new Date().getHours());
         let bet_minutes = parseInt(new Date().getMinutes());
         current_balance = balanceCookie.get('balance');
-        let PLAYER_BET_ADD = `http://localhost:${DB_PORT}/players_bets/add?uid=${uid}&direction=${direction}&cycle_value=${cycle_value}&bet=${bet}&w_bet=${w_bet}&bet_hour=${bet_hour}&bet_minutes=${bet_minutes}`;
+        let PLAYER_BET_ADD = `${dev_db_route}/db/players_bets/add?uid=${uid}&direction=${direction}&cycle_value=${cycle_value}&bet=${bet}&w_bet=${w_bet}&bet_hour=${bet_hour}&bet_minutes=${bet_minutes}`;
 
         if ((parseInt(current_balance) - this.state.bet) >= 0) {
             new_balance = (parseInt(current_balance) - this.state.bet)
@@ -164,30 +164,29 @@ export default class Form extends React.Component {
             <div style ={backdropStyle}>
                 <div style={formStyle}>
                     {/* {this.props.children} */}
-                    <div>
+                    <div style={{textAlign:'center'}}>
                         <div style={upperClose} onClick={(e) => this.onClose(e)}>X</div>
                         
-                        <h3>You are betting that the price at<span> </span>  
-                            {this.state.nextHour} will go<span> </span> 
+                        <h4>You are betting that the price at<span> </span>  
+                            {this.state.nextHour} will be<span> </span> 
                             {this.props.direction} than<span> </span>
-                            {this.props.cycle_value} </h3>
+                            {this.props.cycle_value} </h4><br></br>
                     </div>
 
-                    <div label="QR code section" className="qrSection">
-                        <QRCode value={this.state.user_local_wallet} />
+                    <div label="QR code section" className="qrSection" style={{textAlign:'center'}}>
+                        <p>Scan this QR code to pay with Bitcoins</p><br></br>
+                        {/* <QRCode value={this.state.user_local_wallet} /> */}
                     </div>
-                    <div>
-                        <p>Current cycle is until {this.state.nextHour}</p>
-                    </div>
-                    <div>
-                        <p>Or if you want to play on free points:</p>
+                    <div style={{textAlign:'center'}}>
+                    <br></br><p>Or if you want to play with free points. 
+                            <br></br>You have {this.props.balance} points left.</p>
                         <form onSubmit={(e) => {
                             this.onClose(e);
                             this.handleBet(e);
                             this.setBetTime();
                             // this.updatePlayersTable();
                             }}>
-                            <input type="number" autofocus="autofocus" onChange={(e) => {this.enterAmount(e)}}/>
+                            <input type="number" autoFocus="autofocus" onChange={(e) => {this.enterAmount(e)}}/>
                             <input type='submit' value='Bet'/>
                         </form>
                     </div>

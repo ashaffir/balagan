@@ -4,8 +4,8 @@ import Cookies from 'universal-cookie';
 import uniqueid from 'uniqid';
 
 const balanceCookie = new Cookies();
-const DB_PORT = 4000;
 
+const dev_db_route = 'http://localhost:3001';
 
 export default class Players extends Component {
     state = {
@@ -22,7 +22,7 @@ export default class Players extends Component {
       }
 
     getPlayers = () => {
-        fetch(`http://localhost:${DB_PORT}/players`)
+        fetch(`${dev_db_route}/db/players`)
         .then(response => response.json())
         .then(response => {this.setState ({players_bets: response.players_bets})})
         .then(() => {this.updateBalance()})
@@ -57,7 +57,7 @@ export default class Players extends Component {
     
     updateStatusDB = () => {
         let uid = balanceCookie.get('user_id');
-        let PLAYER_STATUS_UPDATE = `http://localhost:${DB_PORT}/players_update?uid=${uid}`;
+        let PLAYER_STATUS_UPDATE = `${dev_db_route}/db/players_update?uid=${uid}`;
         // console.log(`Updating the status of the user ${balanceCookie.get('user_id')}`);
         fetch(PLAYER_STATUS_UPDATE)
         .catch(err => console.log(err));

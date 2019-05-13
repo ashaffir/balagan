@@ -22,7 +22,7 @@ const SELECT_ALL_PLAYERS = 'SELECT * FROM players_table where result=1 and time 
 const SELECT_CURRENT_CYCLE_VALUE = 'SELECT * FROM cycle_value_table WHERE minutes=0 AND hours=';
 const SELECT_PLAYER = 'select * from players_table where time > date_sub(now(), interval 1 hour) and user_id=';
 
-const DB_PORT = 4000;
+const DB_PORT = 3001;
 
 const connection = mysql.createConnection({
     host: 'localhost',
@@ -37,7 +37,7 @@ connection.connect(err => {
     } 
 });
 
-app.get('/bets', (req,res) => {
+app.get('/db/bets', (req,res) => {
     connection.query(SELECT_ALL_ENTRIES, (err, result) => {
         if(err){
             return res.send(err)
@@ -51,7 +51,7 @@ app.get('/bets', (req,res) => {
 
 //////////////// CYCLE VALUE ESECTION //////////////////
 
-app.get('/cycle_value', (req,res) => {
+app.get('/db/cycle_value', (req,res) => {
     console.log('in time');
     let hour = parseInt(new Date().getHours());
     connection.query(`${SELECT_CURRENT_CYCLE_VALUE}${hour} limit 1`, (err, result) => {
@@ -69,7 +69,7 @@ app.get('/cycle_value', (req,res) => {
 //////////////// PLAYERS (not real money) SECTION //////////
 
 // Display only the winning players
-app.get('/players', (req,res) => {
+app.get('/db/players', (req,res) => {
     connection.query(`${SELECT_ALL_PLAYERS}`, (err, result) => {
         if(err) {
             return res.send(err)
@@ -82,7 +82,7 @@ app.get('/players', (req,res) => {
 })
 
 // Display player information (bets, time, won/lost, payout)
-app.get('/player_info', (req,res) => {
+app.get('/db/player_info', (req,res) => {
     const {uid} = req.query;
     connection.query(`${SELECT_PLAYER}'${uid}'`, (err, result) => {
         if(err) {
@@ -97,7 +97,7 @@ app.get('/player_info', (req,res) => {
 })
 
 // Add new player's bet
-app.get('/players_bets/add', (req, res) => {
+app.get('/db/players_bets/add', (req, res) => {
     const { uid, direction, cycle_value, bet, w_bet, bet_hour, bet_minutes } = req.query;
     const ADD_NEW_BET = `INSERT INTO players_table (user_id, direction, cycle_value, bet, w_bet, bet_hour, bet_minutes) 
                          VALUES ('${uid}','${direction}','${cycle_value}','${bet}', '${w_bet}', '${bet_hour}', '${bet_minutes}')`;
@@ -111,7 +111,7 @@ app.get('/players_bets/add', (req, res) => {
 })
 
 // Update player status
-app.get('/players_update', (req, res) => {
+app.get('/db/players_update', (req, res) => {
     const {uid} = req.query;
     const UPDATE_STATUS = `update players_table set status=1 where user_id='${uid}' and bet_hour=${parseInt(new Date().getHours())-1}`;
     console.log(UPDATE_STATUS);
@@ -126,7 +126,7 @@ app.get('/players_update', (req, res) => {
 
 //////////////// END PLAYERS SECTION //////////////////
 
-app.get('/bets/add', (req, res) => {
+app.get('/db/bets/add', (req, res) => {
     const { ulw, direction, cycle_value } = req.query;
     const ADD_NEW_BET = `INSERT INTO betting_table (user_local_wallet, direction, cycle_value) VALUES ('${ulw}','${direction}','${cycle_value}')`;
     connection.query(ADD_NEW_BET, err => {
@@ -138,7 +138,7 @@ app.get('/bets/add', (req, res) => {
     })
 })
 
-app.get('/bets/update_payment', (req, res) => {
+app.get('/db/bets/update_payment', (req, res) => {
     const { ulw, bet, user_wallet } = req.query;
     const UPDATE_PAYMENT = `UPDATE betting_table SET bet=${bet}, user_wallet='${user_wallet}', bet_time=bet_time WHERE user_local_wallet='${ulw}'`;
     connection.query(UPDATE_PAYMENT, err => {
@@ -151,7 +151,7 @@ app.get('/bets/update_payment', (req, res) => {
     })
 })
 
-app.get('/bets/update_result', (req, res) => {
+app.get('/db/bets/update_result', (req, res) => {
     const { ulw, result} = req.query;
     const UPDATE_RESULT = `UPDATE betting_table SET result=${result}, bet_time=bet_time WHERE user_local_wallet='${ulw}'`;
     connection.query(UPDATE_RESULT, err => {
@@ -164,7 +164,7 @@ app.get('/bets/update_result', (req, res) => {
     })
 })
 
-app.get('/bets/update_payout', (req, res) => {
+app.get('/db/bets/update_payout', (req, res) => {
     const { ulw, payout} = req.query;
     const UPDATE_PAYOUT = `UPDATE betting_table SET payout=${payout}, bet_time=bet_time WHERE user_local_wallet='${ulw}'`;
     connection.query(UPDATE_PAYOUT, err => {
@@ -177,7 +177,7 @@ app.get('/bets/update_payout', (req, res) => {
     })
 })
 
-app.get('/bets/update_status', (req, res) => {
+app.get('/db/bets/update_status', (req, res) => {
     const { ulw, status} = req.query;
     const UPDATE_STATUS = `UPDATE betting_table SET status=${status}, bet_time=bet_time WHERE user_local_wallet='${ulw}'`;
     connection.query(UPDATE_STATUS, err => {

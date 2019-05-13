@@ -53,3 +53,10 @@ body {
   img {
     opacity: 0.6;
   }
+
+.logo-section {
+  text-align: center;
+  padding: 20px;
+  background: darkblue;
+
+  }

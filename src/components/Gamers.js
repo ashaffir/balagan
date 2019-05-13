@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import './Gamers.css'
-const DB_PORT = 4000;
 
 export default class Gamers extends Component {
     state = {
@@ -8,7 +7,7 @@ export default class Gamers extends Component {
       }
 
       getUsers = () => {
-        fetch(`http://localhost:${DB_PORT}/bets`)
+        fetch(`/db/bets`)
         .then(response => response.json())
         .then(response => {this.setState ({bets: response.bets})})
         .catch((err) => {
