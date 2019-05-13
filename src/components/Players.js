@@ -5,7 +5,8 @@ import uniqueid from 'uniqid';
 
 const balanceCookie = new Cookies();
 
-const dev_db_route = 'http://localhost:3001';
+const DB_PORT = 3003;
+const dev_db_route = `http://localhost:${DB_PORT}`;
 
 export default class Players extends Component {
     state = {

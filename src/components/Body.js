@@ -16,14 +16,10 @@ import './Body.css';
 const balanceCookie = new Cookies();
 const uid_cookie = new Cookies();
 
-const dev_db_route = 'http://localhost:3001';
+const DB_PORT = 3003;
+const dev_db_route = `http://localhost:${DB_PORT}`;
 
 ReactFC.fcRoot(FusionCharts, Charts, Widgets, FusionTheme);
-
-const playersStyle = {
-  padding: '20px',
-  maxWidth: '40%'
-}
 
 class Body extends React.Component{
     constructor(props){
@@ -215,11 +211,11 @@ class Body extends React.Component{
             </div>
             <div>
               <div>
-                  <button className="push_button blue" 
+                  <button type="button" className="push_button blue" 
                   onClick={
                     (e) => {
                       this.showForm();
-                      this.setDirection('HIGHER')
+                      this.setDirection('Up')
                       this.getCycleValue();
                       this.getUserId();
                       }}>Will be Higher</button>
@@ -242,7 +238,7 @@ class Body extends React.Component{
                   onClick={
                     (e) => {
                       this.showForm();
-                      this.setDirection('LOWER');
+                      this.setDirection('Down');
                       this.getCycleValue();
                       this.getUserId();
                       }}>Will be Lower</button>

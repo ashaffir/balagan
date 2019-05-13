@@ -5,7 +5,10 @@ import uniqueid from 'uniqid';
 
 const userCookie = new Cookies();
 
-const dev_db_route = 'http://localhost:3001';
+// const DB_PORT = process.env.REACT_APP_DB_PORT;
+//const dev_db_route = (process.env.NODE_ENV === 'development') ? `http://localhost:${DB_PORT}` : '';
+const DB_PORT = 3003;
+const dev_db_route = `http://localhost:${DB_PORT}`;
 
 export default class Bets extends Component {
     state = {

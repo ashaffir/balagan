@@ -11,7 +11,9 @@ import Cookies from 'universal-cookie';
 
 const userIdCookie = new Cookies();
 
-const dev_db_route = 'http://localhost:3001';
+
+const DB_PORT = 3003;
+const dev_db_route = `http://localhost:${DB_PORT}`;
 
 const backdropStyle = {
     position: 'fixed',
@@ -169,7 +171,7 @@ export default class Form extends React.Component {
                         
                         <h4>You are betting that the price at<span> </span>  
                             {this.state.nextHour} will be<span> </span> 
-                            {this.props.direction} than<span> </span>
+                            {this.props.direction === 'Up'? 'HIGHER' : 'LOWER'} than<span> </span>
                             {this.props.cycle_value} </h4><br></br>
                     </div>
 

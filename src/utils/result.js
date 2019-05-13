@@ -22,25 +22,12 @@ We = ((Ub x Tu) / SUM_W_BETS) x BET_PORTION x SUM_LOOSING_BETS
 
 const SELECT_CURRENT_CYCLE_VALUE = `select cycle_value from cycle_value_table where minutes=0 and hours=`;
 const SELECT_PREV_CYCLE_VALUE = `select cycle_value from cycle_value_table where minutes=0 and hours=`;
-const CALCULATE_WIN_LOSE_AMOUNT = `SELECT SUM(bet) as 'sum' FROM players_table WHERE direction=`;
-const CALCULATE_W_BETS_AMOUNT = `SELECT SUM(w_bet) as 'sum' FROM players_table WHERE direction=`;
-
-
-// const DRAW_CYCLE = `update players_table set result=3 where hours=`;
-// const UP_PLAYERS_WON = `update players_table set result=1 where direction='up';`;
-// const UP_PLAYERS_LOST = `update players_table set result=0 where direction='up';`;
-// const DOWN_PLAYERS_WON = `update players_table set result=1 where direction='down';`;
-// const DOWN_PLAYERS_LOST = `update players_table set result=0 where direction='down';`;
-// const COUNT_WINNERS= `SELECT COUNT(user_id) FROM players_table WHERE status=1;`;
-// const UPDATE_STATUS_LOST = `UPDATE players_table SET result=0 WHERE direction='down';`;
-// const UPDATE_RESULT_WON= `UPDATE players_table SET result=1 WHERE direction='up;'`;
-// const UPDATE_W_BET = `UPDATE players_table SET w_bet=bet*20 WHERE status=1;`;
-// const SUM_LOOSING_BETS = `SELECT SUM(bet) FROM players_table WHERE result=0;`;
-// const SUM_WINNING_BETS = `SELECT SUM(bet) FROM players_table WHERE result=1;`;
-// const SUM_W_BETS = `SELECT SUM(w_bet) FROM players_table WHERE result=1;`;
+const CALCULATE_WIN_LOSE_AMOUNT = `SELECT SUM(bet) as 'sum' FROM players_table WHERE time > date_sub(now(), interval 10 hour) and bet_hour=`;
+const CALCULATE_W_BETS_AMOUNT = `SELECT SUM(w_bet) as 'sum' FROM players_table WHERE time > date_sub(now(), interval 10 hour) and bet_hour=`;
 
 const COMMISSION = 0.004;
 const BET_PORTION = (1 - COMMISSION) / 2;
+
 const DB_PASS = '1q@W#E$R5t';
 
 let loosing_bets, winning_bets, weighted_bets, up_down;
@@ -95,8 +82,8 @@ const db = new Database(params);
 ///////////////////////////
 
 function resultsCalculation(){
-    console.log(`RESULTS CALCULATION AT: ${new Date().toLocaleString()}`);
-    // console.log(`Running: ${SELECT_PREV_CYCLE_VALUE}${parseInt(new Date().getHours())-1} limit 1;`);
+    console.log(`RESULTS CALCULATION AT: ${new Date().toLocaleString()}`); 
+    console.log(`Running: ${SELECT_PREV_CYCLE_VALUE}${parseInt(new Date().getHours())-1} limit 1;`);
     db.query(`${SELECT_PREV_CYCLE_VALUE}${parseInt(new Date().getHours())-1} limit 1;`)
         .then(prev_cycle => { // result from the SELECT_PREV_CYCLE_VALUE => getting the previous cycle_value
             prev_value = prev_cycle[0]['cycle_value'];
@@ -136,7 +123,7 @@ function resultsCalculation(){
             // console.log(`dir1 = ${up_down}`);
             // console.log(`***************************`)
             // console.log(`${CALCULATE_LOOSING_AMOUNT}'${up_down}';`)
-            db.query(`${CALCULATE_WIN_LOSE_AMOUNT}'${up_down}';`) //Calculating the winning mount
+            db.query(`${CALCULATE_WIN_LOSE_AMOUNT}${parseInt(new Date().getHours())-1} and direction='${up_down}';`) //Calculating the winning mount
             .then(winnings => {
                 winning_bets = winnings[0]['sum'];
                 console.log(`Winnings amount is: ${winning_bets}`);
@@ -144,7 +131,7 @@ function resultsCalculation(){
             })
             .then(up_down => {
                 // console.log(`dir2 = ${up_down}`);
-                db.query(`${CALCULATE_W_BETS_AMOUNT}'${up_down}';`) //Calculating the weighted bets amount
+                db.query(`${CALCULATE_W_BETS_AMOUNT}${parseInt(new Date().getHours())-1} and direction='${up_down}';`) //Calculating the weighted bets amount
                 .then(w_bets => {
                     // console.log(`dir2.5 = ${up_down}`);
                     weighted_bets = w_bets[0]['sum'];
@@ -153,7 +140,7 @@ function resultsCalculation(){
                 })
                 .then(up_down => {
                     // console.log(`dir3 = ${up_down}`);
-                    db.query(`${CALCULATE_WIN_LOSE_AMOUNT}'${up_down === 'Down' ? 'Up':'Down'}';`) // Calculating the loosing amount
+                    db.query(`${CALCULATE_WIN_LOSE_AMOUNT}${parseInt(new Date().getHours())-1} and direction='${up_down === 'Down' ? 'Up':'Down'}';`) // Flipping logic to calculate the loosing amount
                     .then(loosings => {
                         loosing_bets = loosings[0]['sum'];
                         // console.log(up_down)

@@ -14,6 +14,7 @@ const mysql = require('mysql');
 const app = express();
 
 const DB_PASS = '1q@W#E$R5t';
+const DB_PORT = 3003;
 
 app.use(cors());
 
@@ -22,7 +23,6 @@ const SELECT_ALL_PLAYERS = 'SELECT * FROM players_table where result=1 and time 
 const SELECT_CURRENT_CYCLE_VALUE = 'SELECT * FROM cycle_value_table WHERE minutes=0 AND hours=';
 const SELECT_PLAYER = 'select * from players_table where time > date_sub(now(), interval 1 hour) and user_id=';
 
-const DB_PORT = 3001;
 
 const connection = mysql.createConnection({
     host: 'localhost',
@@ -193,4 +193,3 @@ app.get('/db/bets/update_status', (req, res) => {
 app.listen(DB_PORT, () => {
     console.log(`Listening on port ${DB_PORT}`) 
 })
-
